@@ -41,10 +41,10 @@ export default function SelectWorkoutPage() {
     (type) => type !== "Descanso",
   )
 
-  const workoutTypeConfig: Record<string, { icon: typeof Dumbbell; color: string; bg: string; desc: string }> = {
-    "Max Reps": { icon: Zap, color: "text-amber-600", bg: "bg-amber-50", desc: "3 series al máximo, 5 min descanso" },
-    "Sub Max": { icon: TrendingUp, color: "text-emerald-600", bg: "bg-emerald-50", desc: "10 series al 50%, 1 min descanso" },
-    "Volumen Escalera": { icon: Dumbbell, color: "text-sky-600", bg: "bg-sky-50", desc: "Escalera 1→N, 5 ciclos, 30s descanso" },
+  const workoutTypeConfig: Record<string, { icon: typeof Dumbbell; desc: string }> = {
+    "Max Reps": { icon: Zap, desc: "3 series al máximo, 5 min descanso" },
+    "Sub Max": { icon: TrendingUp, desc: "10 series al 50%, 1 min descanso" },
+    "Volumen Escalera": { icon: Dumbbell, desc: "Escalera 1→N, 5 ciclos, 30s descanso" },
   }
 
   return (
@@ -55,15 +55,10 @@ export default function SelectWorkoutPage() {
       </div>
 
       {suggestedWorkout && (
-        <div
-          className={cn(
-            "mb-8 rounded-2xl border-2 p-5 transition-all duration-200",
-            "border-amber-200 bg-amber-50 shadow-sm"
-          )}
-        >
+        <div className="mb-8 rounded-2xl border-2 border-primary/40 bg-card p-5 shadow-md ring-1 ring-primary/20">
           <div className="flex items-center gap-2 mb-3">
-            <Sparkles className="h-5 w-5 text-amber-600" />
-            <span className="text-sm font-bold text-amber-800 uppercase tracking-wide">Sugerido para hoy</span>
+            <Sparkles className="h-5 w-5 text-primary" />
+            <span className="text-xs font-extrabold text-primary uppercase tracking-widest">Sugerido para hoy</span>
           </div>
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
@@ -73,7 +68,7 @@ export default function SelectWorkoutPage() {
             <Button
               variant="outline"
               size="sm"
-              className="h-10 px-4 bg-white border-amber-200 hover:bg-amber-100 hover:border-amber-300 font-semibold transition-all active:scale-95"
+              className="h-10 px-4 bg-card border-border font-bold hover:bg-muted transition-all active:scale-95"
               onClick={() => {
                 setSelectedExercise(suggestedWorkout.exercise)
                 setSelectedWorkoutType(suggestedWorkout.workoutType)
@@ -88,7 +83,7 @@ export default function SelectWorkoutPage() {
       <div className="space-y-10">
         {/* Exercise Selection */}
         <div className="space-y-4">
-          <h2 className="text-xs font-bold text-muted-foreground uppercase tracking-widest">Ejercicio</h2>
+          <h2 className="text-xs font-extrabold text-muted-foreground uppercase tracking-widest">Ejercicio</h2>
           <div className="grid grid-cols-2 gap-3">
             {exercises.map((exercise) => {
               const isSelected = selectedExercise === exercise
@@ -98,25 +93,20 @@ export default function SelectWorkoutPage() {
                   onClick={() => setSelectedExercise(exercise)}
                   className={cn(
                     "relative flex flex-col items-center justify-center gap-2 rounded-2xl border-2 p-6 transition-all duration-200",
-                    "active:scale-95 active:shadow-inner",
+                    "active:scale-[0.96] active:shadow-inner",
                     isSelected
-                      ? "border-primary bg-primary/5 shadow-md"
-                      : "border-border bg-card hover:border-primary/40 hover:shadow-md hover:bg-muted/50"
+                      ? "border-primary bg-primary text-primary-foreground shadow-lg"
+                      : "border-border bg-card text-foreground hover:border-primary/50 hover:shadow-md hover:bg-muted/50"
                   )}
                 >
                   {isSelected && (
-                    <div className="absolute top-3 right-3 flex h-6 w-6 items-center justify-center rounded-full bg-primary shadow-sm">
-                      <Check className="h-3.5 w-3.5 text-primary-foreground" strokeWidth={3} />
+                    <div className="absolute top-3 right-3 flex h-6 w-6 items-center justify-center rounded-full bg-primary-foreground shadow-sm">
+                      <Check className="h-3.5 w-3.5 text-primary" strokeWidth={3} />
                     </div>
                   )}
-                  <span className={cn(
-                    "text-lg font-bold transition-colors",
-                    isSelected ? "text-primary" : "text-foreground"
-                  )}>
-                    {exercise}
-                  </span>
+                  <span className="text-lg font-extrabold">{exercise}</span>
                   {isSelected && (
-                    <span className="text-xs font-semibold text-primary">Seleccionado</span>
+                    <span className="text-xs font-bold opacity-90">Seleccionado</span>
                   )}
                 </button>
               )
@@ -126,10 +116,10 @@ export default function SelectWorkoutPage() {
 
         {/* Workout Type Selection */}
         <div className="space-y-4">
-          <h2 className="text-xs font-bold text-muted-foreground uppercase tracking-widest">Tipo de entrenamiento</h2>
+          <h2 className="text-xs font-extrabold text-muted-foreground uppercase tracking-widest">Tipo de entrenamiento</h2>
           <div className="space-y-3">
             {workoutTypes.map((type) => {
-              const config = workoutTypeConfig[type] || { icon: Dumbbell, color: "text-gray-500", bg: "bg-gray-50", desc: "" }
+              const config = workoutTypeConfig[type] || { icon: Dumbbell, desc: "" }
               const Icon = config.icon
               const isSelected = selectedWorkoutType === type
 
@@ -141,20 +131,25 @@ export default function SelectWorkoutPage() {
                     "flex w-full items-center gap-4 rounded-2xl border-2 p-4 text-left transition-all duration-200",
                     "active:scale-[0.98] active:shadow-inner",
                     isSelected
-                      ? "border-primary bg-primary/5 shadow-md"
-                      : "border-border bg-card hover:border-primary/40 hover:shadow-md hover:bg-muted/50"
+                      ? "border-primary bg-primary text-primary-foreground shadow-lg"
+                      : "border-border bg-card text-foreground hover:border-primary/50 hover:shadow-md hover:bg-muted/50"
                   )}
                 >
-                  <div className={cn("flex h-12 w-12 shrink-0 items-center justify-center rounded-xl", config.bg)}>
-                    <Icon className={cn("h-6 w-6", config.color)} />
+                  <div className={cn(
+                    "flex h-12 w-12 shrink-0 items-center justify-center rounded-xl",
+                    isSelected ? "bg-primary-foreground/20" : "bg-muted"
+                  )}>
+                    <Icon className={cn("h-6 w-6", isSelected ? "text-primary-foreground" : "text-muted-foreground")} />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className={cn("font-bold text-base", isSelected ? "text-primary" : "text-foreground")}>{type}</p>
-                    <p className="text-sm text-muted-foreground">{config.desc}</p>
+                    <p className="font-extrabold text-base">{type}</p>
+                    <p className={cn("text-sm", isSelected ? "text-primary-foreground/80" : "text-muted-foreground")}>
+                      {config.desc}
+                    </p>
                   </div>
                   {isSelected ? (
-                    <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary shadow-sm">
-                      <Check className="h-4 w-4 text-primary-foreground" strokeWidth={3} />
+                    <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary-foreground shadow-sm">
+                      <Check className="h-4 w-4 text-primary" strokeWidth={3} />
                     </div>
                   ) : (
                     <div className="h-7 w-7 shrink-0 rounded-full border-2 border-muted-foreground/30" />
@@ -168,8 +163,8 @@ export default function SelectWorkoutPage() {
         <Button
           size="lg"
           className={cn(
-            "w-full h-14 text-base font-bold shadow-lg transition-all duration-200",
-            "active:scale-95 active:shadow-md",
+            "w-full h-14 text-base font-extrabold shadow-xl transition-all duration-200",
+            "active:scale-95 active:shadow-lg",
             isTransitioning && "opacity-80 scale-95"
           )}
           onClick={handleStartWorkout}

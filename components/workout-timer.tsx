@@ -62,9 +62,9 @@ export default function WorkoutTimer({ duration, onComplete, autoStart = false }
   }
 
   const getTimerColor = () => {
-    if (timeLeft > duration * 0.5) return "text-emerald-600"
-    if (timeLeft > duration * 0.2) return "text-amber-600"
-    return "text-red-600"
+    if (timeLeft > duration * 0.5) return "text-emerald-500"
+    if (timeLeft > duration * 0.2) return "text-amber-500"
+    return "text-red-500"
   }
 
   return (

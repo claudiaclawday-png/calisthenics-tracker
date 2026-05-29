@@ -77,10 +77,10 @@ export default function VolumeWorkout({ onComplete }: VolumeWorkoutProps) {
       {showTimer ? (
         <div className="space-y-6 py-4">
           <div className="text-center space-y-1">
-            <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-sky-50">
-              <Trophy className="h-6 w-6 text-sky-500" />
+            <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-muted ring-1 ring-border">
+              <Trophy className="h-6 w-6 text-primary" />
             </div>
-            <p className="text-sm font-bold uppercase tracking-widest text-muted-foreground">Descanso</p>
+            <p className="text-sm font-extrabold uppercase tracking-widest text-muted-foreground">Descanso</p>
             <p className="text-xs text-muted-foreground">Ciclo {currentCycle} · Rep {currentRep} completada</p>
           </div>
           <WorkoutTimer duration={restTime} onComplete={handleTimerComplete} autoStart={true} />
@@ -89,7 +89,7 @@ export default function VolumeWorkout({ onComplete }: VolumeWorkoutProps) {
         <>
           <div className="space-y-3">
             <div className="text-center space-y-2">
-              <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
+              <p className="text-xs font-extrabold uppercase tracking-widest text-muted-foreground">
                 Ciclo {currentCycle} de {totalCycles}
               </p>
               <p className="text-sm text-muted-foreground">
@@ -109,7 +109,7 @@ export default function VolumeWorkout({ onComplete }: VolumeWorkoutProps) {
 
                 <Button 
                   size="lg" 
-                  className="w-full h-14 text-base font-bold shadow-lg active:scale-95 active:shadow-md transition-all duration-150"
+                  className="w-full h-14 text-base font-extrabold shadow-lg active:scale-95 active:shadow-md transition-all duration-150"
                   onClick={handleCompleteRep}
                 >
                   <Check className="mr-2 h-5 w-5" />
@@ -121,7 +121,7 @@ export default function VolumeWorkout({ onComplete }: VolumeWorkoutProps) {
 
           <Card className="shadow-md border-2 border-border">
             <CardContent className="pt-5">
-              <p className="mb-3 text-xs font-bold uppercase tracking-widest text-muted-foreground">Progreso del ciclo</p>
+              <p className="mb-3 text-xs font-extrabold uppercase tracking-widest text-muted-foreground">Progreso del ciclo</p>
               <div className="flex flex-wrap gap-2">
                 {Array.from({ length: maxReps }, (_, i) => i + 1).map((rep) => {
                   const isCompleted = completedReps[currentCycle - 1]?.includes(rep)
@@ -136,7 +136,7 @@ export default function VolumeWorkout({ onComplete }: VolumeWorkoutProps) {
                           ? "bg-primary text-primary-foreground shadow-md"
                           : isCurrent
                             ? "border-2 border-primary bg-background shadow-md ring-2 ring-primary/20"
-                            : "bg-muted text-muted-foreground"
+                            : "bg-muted text-muted-foreground border border-border"
                       )}
                     >
                       {rep}
@@ -150,12 +150,12 @@ export default function VolumeWorkout({ onComplete }: VolumeWorkoutProps) {
           {currentCycle > 1 && (
             <Card className="shadow-md border-2 border-border">
               <CardContent className="pt-5">
-                <p className="mb-3 text-xs font-bold uppercase tracking-widest text-muted-foreground">Ciclos completados</p>
+                <p className="mb-3 text-xs font-extrabold uppercase tracking-widest text-muted-foreground">Ciclos completados</p>
                 <div className="space-y-2">
                   {completedReps.slice(0, currentCycle - 1).map((cycle, index) => (
-                    <div key={index} className="flex items-center justify-between rounded-xl bg-muted/60 px-4 py-3">
+                    <div key={index} className="flex items-center justify-between rounded-xl bg-muted px-4 py-3">
                       <span className="text-sm font-semibold text-muted-foreground">Ciclo {index + 1}</span>
-                      <span className="font-bold tabular-nums text-lg">
+                      <span className="font-bold tabular-nums text-lg text-foreground">
                         {cycle.reduce((a, b) => a + b, 0)} reps
                       </span>
                     </div>

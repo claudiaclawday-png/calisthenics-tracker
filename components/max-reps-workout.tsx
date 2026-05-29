@@ -54,10 +54,10 @@ export default function MaxRepsWorkout({ onComplete }: MaxRepsWorkoutProps) {
       {showTimer ? (
         <div className="space-y-6 py-4">
           <div className="text-center space-y-1">
-            <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-amber-50">
-              <Trophy className="h-6 w-6 text-amber-500" />
+            <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-muted ring-1 ring-border">
+              <Trophy className="h-6 w-6 text-primary" />
             </div>
-            <p className="text-sm font-bold uppercase tracking-widest text-muted-foreground">Descanso</p>
+            <p className="text-sm font-extrabold uppercase tracking-widest text-muted-foreground">Descanso</p>
             <p className="text-xs text-muted-foreground">Serie {currentSet} de {totalSets} completada</p>
           </div>
           <WorkoutTimer duration={restTime} onComplete={handleTimerComplete} autoStart={true} />
@@ -66,7 +66,7 @@ export default function MaxRepsWorkout({ onComplete }: MaxRepsWorkoutProps) {
         <>
           <div className="space-y-3">
             <div className="text-center space-y-2">
-              <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
+              <p className="text-xs font-extrabold uppercase tracking-widest text-muted-foreground">
                 Serie {currentSet} de {totalSets}
               </p>
               <p className="text-sm text-muted-foreground">Máximo de repeticiones posible</p>
@@ -105,7 +105,7 @@ export default function MaxRepsWorkout({ onComplete }: MaxRepsWorkoutProps) {
 
                 {/* Quick Select */}
                 <div className="space-y-3">
-                  <p className="text-center text-xs font-bold uppercase tracking-widest text-muted-foreground">Selección rápida</p>
+                  <p className="text-center text-xs font-extrabold uppercase tracking-widest text-muted-foreground">Selección rápida</p>
                   <div className="grid grid-cols-4 gap-2">
                     {QUICK_REPS.map((quickRep) => (
                       <Button
@@ -115,7 +115,7 @@ export default function MaxRepsWorkout({ onComplete }: MaxRepsWorkoutProps) {
                         onClick={() => handleRepChange(quickRep)}
                         className={cn(
                           "h-14 text-lg font-bold shadow-sm active:scale-95 transition-all duration-150",
-                          reps[currentSet - 1] === quickRep && "ring-2 ring-primary ring-offset-2"
+                          reps[currentSet - 1] === quickRep && "ring-2 ring-primary ring-offset-2 ring-offset-background"
                         )}
                       >
                         {quickRep}
@@ -126,7 +126,7 @@ export default function MaxRepsWorkout({ onComplete }: MaxRepsWorkoutProps) {
 
                 <Button 
                   size="lg" 
-                  className="w-full h-14 text-base font-bold shadow-lg active:scale-95 active:shadow-md transition-all duration-150"
+                  className="w-full h-14 text-base font-extrabold shadow-lg active:scale-95 active:shadow-md transition-all duration-150"
                   onClick={handleNextSet}
                 >
                   {currentSet < totalSets ? (
@@ -142,12 +142,12 @@ export default function MaxRepsWorkout({ onComplete }: MaxRepsWorkoutProps) {
           {currentSet > 1 && (
             <Card className="shadow-md border-2 border-border">
               <CardContent className="pt-5">
-                <p className="mb-3 text-xs font-bold uppercase tracking-widest text-muted-foreground">Series anteriores</p>
+                <p className="mb-3 text-xs font-extrabold uppercase tracking-widest text-muted-foreground">Series anteriores</p>
                 <div className="space-y-2">
                   {reps.slice(0, currentSet - 1).map((rep, index) => (
-                    <div key={index} className="flex items-center justify-between rounded-xl bg-muted/60 px-4 py-3">
+                    <div key={index} className="flex items-center justify-between rounded-xl bg-muted px-4 py-3">
                       <span className="text-sm font-semibold text-muted-foreground">Serie {index + 1}</span>
-                      <span className="font-bold tabular-nums text-lg">{rep} reps</span>
+                      <span className="font-bold tabular-nums text-lg text-foreground">{rep} reps</span>
                     </div>
                   ))}
                 </div>

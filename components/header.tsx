@@ -18,7 +18,7 @@ export default function Header() {
   return (
     <>
       {/* Top Header */}
-      <header className="sticky top-0 z-50 border-b bg-background/90 backdrop-blur-xl shadow-[0_1px_3px_-1px_rgba(0,0,0,0.08)]">
+      <header className="sticky top-0 z-50 border-b border-border/80 bg-background/90 backdrop-blur-xl shadow-[0_1px_3px_-1px_rgba(0,0,0,0.08)]">
         <div className="container flex h-14 items-center px-4 pt-safe">
           <div className="flex items-center">
             <Link href="/" className="flex items-center space-x-2 active:opacity-70 transition-opacity">
@@ -29,7 +29,7 @@ export default function Header() {
       </header>
 
       {/* Bottom Navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 z-50 flex h-[calc(4rem+env(safe-area-inset-bottom))] items-center justify-around border-t bg-background/90 backdrop-blur-xl shadow-[0_-4px_12px_-4px_rgba(0,0,0,0.08)] pb-safe">
+      <nav className="fixed bottom-0 left-0 right-0 z-50 flex h-[calc(4rem+env(safe-area-inset-bottom))] items-center justify-around border-t border-border/80 bg-background/90 backdrop-blur-xl shadow-[0_-4px_12px_-4px_rgba(0,0,0,0.08)] pb-safe">
         {navItems.map((item) => {
           const Icon = item.icon
           const isActive = pathname === item.href
