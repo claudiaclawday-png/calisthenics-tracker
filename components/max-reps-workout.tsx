@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import WorkoutTimer from "@/components/workout-timer"
-import { Plus, Minus } from "lucide-react"
+import { Plus, Minus, ChevronRight, Trophy } from "lucide-react"
+import { cn } from "@/lib/utils"
 
 interface MaxRepsWorkoutProps {
   onComplete: (data: any) => void
@@ -53,7 +54,10 @@ export default function MaxRepsWorkout({ onComplete }: MaxRepsWorkoutProps) {
       {showTimer ? (
         <div className="space-y-6 py-4">
           <div className="text-center space-y-1">
-            <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">Descanso</p>
+            <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-amber-50">
+              <Trophy className="h-6 w-6 text-amber-500" />
+            </div>
+            <p className="text-sm font-bold uppercase tracking-widest text-muted-foreground">Descanso</p>
             <p className="text-xs text-muted-foreground">Serie {currentSet} de {totalSets} completada</p>
           </div>
           <WorkoutTimer duration={restTime} onComplete={handleTimerComplete} autoStart={true} />
@@ -61,47 +65,47 @@ export default function MaxRepsWorkout({ onComplete }: MaxRepsWorkoutProps) {
       ) : (
         <>
           <div className="space-y-3">
-            <div className="text-center space-y-1">
-              <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+            <div className="text-center space-y-2">
+              <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
                 Serie {currentSet} de {totalSets}
               </p>
-              <p className="text-xs text-muted-foreground">Máximo de repeticiones posible</p>
+              <p className="text-sm text-muted-foreground">Máximo de repeticiones posible</p>
             </div>
-            <Progress value={(currentSet / totalSets) * 100} className="h-2" />
+            <Progress value={(currentSet / totalSets) * 100} className="h-2.5" />
           </div>
 
-          <Card className="shadow-sm border">
+          <Card className="shadow-md border-2 border-border">
             <CardContent className="pt-6">
               <div className="space-y-8">
                 {/* Counter */}
-                <div className="flex flex-col items-center justify-center space-y-2">
-                  <div className="flex items-center gap-6">
+                <div className="flex flex-col items-center justify-center space-y-3">
+                  <div className="flex items-center gap-5">
                     <Button
                       variant="outline"
                       size="icon"
                       onClick={() => handleRepChange(reps[currentSet - 1] - 1)}
-                      className="h-14 w-14 rounded-2xl border-2 shadow-sm"
+                      className="h-16 w-16 rounded-2xl border-2 shadow-sm active:scale-90 active:shadow-inner transition-all duration-150"
                     >
-                      <Minus className="h-6 w-6" />
+                      <Minus className="h-7 w-7" />
                     </Button>
-                    <span className="min-w-[100px] text-center text-7xl font-extrabold tabular-nums tracking-tight">
+                    <span className="min-w-[110px] text-center text-7xl font-extrabold tabular-nums tracking-tight text-foreground">
                       {reps[currentSet - 1]}
                     </span>
                     <Button
                       variant="outline"
                       size="icon"
                       onClick={() => handleRepChange(reps[currentSet - 1] + 1)}
-                      className="h-14 w-14 rounded-2xl border-2 shadow-sm"
+                      className="h-16 w-16 rounded-2xl border-2 shadow-sm active:scale-90 active:shadow-inner transition-all duration-150"
                     >
-                      <Plus className="h-6 w-6" />
+                      <Plus className="h-7 w-7" />
                     </Button>
                   </div>
-                  <p className="text-sm font-medium text-muted-foreground">Repeticiones</p>
+                  <p className="text-sm font-semibold text-muted-foreground">Repeticiones</p>
                 </div>
 
                 {/* Quick Select */}
                 <div className="space-y-3">
-                  <p className="text-center text-xs font-bold uppercase tracking-wide text-muted-foreground">Selección rápida</p>
+                  <p className="text-center text-xs font-bold uppercase tracking-widest text-muted-foreground">Selección rápida</p>
                   <div className="grid grid-cols-4 gap-2">
                     {QUICK_REPS.map((quickRep) => (
                       <Button
@@ -109,7 +113,10 @@ export default function MaxRepsWorkout({ onComplete }: MaxRepsWorkoutProps) {
                         variant={reps[currentSet - 1] === quickRep ? "default" : "outline"}
                         size="lg"
                         onClick={() => handleRepChange(quickRep)}
-                        className="h-12 text-lg font-bold shadow-sm"
+                        className={cn(
+                          "h-14 text-lg font-bold shadow-sm active:scale-95 transition-all duration-150",
+                          reps[currentSet - 1] === quickRep && "ring-2 ring-primary ring-offset-2"
+                        )}
                       >
                         {quickRep}
                       </Button>
@@ -117,22 +124,30 @@ export default function MaxRepsWorkout({ onComplete }: MaxRepsWorkoutProps) {
                   </div>
                 </div>
 
-                <Button size="lg" className="w-full h-12 text-base font-semibold shadow-sm" onClick={handleNextSet}>
-                  {currentSet < totalSets ? "Siguiente Serie" : "Completar Entrenamiento"}
+                <Button 
+                  size="lg" 
+                  className="w-full h-14 text-base font-bold shadow-lg active:scale-95 active:shadow-md transition-all duration-150"
+                  onClick={handleNextSet}
+                >
+                  {currentSet < totalSets ? (
+                    <>Siguiente Serie <ChevronRight className="ml-1 h-5 w-5" /></>
+                  ) : (
+                    "Completar Entrenamiento"
+                  )}
                 </Button>
               </div>
             </CardContent>
           </Card>
 
           {currentSet > 1 && (
-            <Card className="shadow-sm border">
+            <Card className="shadow-md border-2 border-border">
               <CardContent className="pt-5">
-                <p className="mb-3 text-xs font-bold uppercase tracking-wide text-muted-foreground">Series anteriores</p>
+                <p className="mb-3 text-xs font-bold uppercase tracking-widest text-muted-foreground">Series anteriores</p>
                 <div className="space-y-2">
                   {reps.slice(0, currentSet - 1).map((rep, index) => (
-                    <div key={index} className="flex items-center justify-between rounded-lg bg-muted/50 px-3 py-2">
-                      <span className="text-sm font-medium text-muted-foreground">Serie {index + 1}</span>
-                      <span className="font-bold tabular-nums">{rep} reps</span>
+                    <div key={index} className="flex items-center justify-between rounded-xl bg-muted/60 px-4 py-3">
+                      <span className="text-sm font-semibold text-muted-foreground">Serie {index + 1}</span>
+                      <span className="font-bold tabular-nums text-lg">{rep} reps</span>
                     </div>
                   ))}
                 </div>

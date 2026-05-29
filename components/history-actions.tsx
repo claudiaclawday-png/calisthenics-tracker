@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Download, Upload } from "lucide-react"
 import { useWorkoutStore } from "@/lib/workout-store"
 
+
 export default function HistoryActions() {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const { exportWorkouts, importWorkouts } = useWorkoutStore()
@@ -52,11 +53,21 @@ export default function HistoryActions() {
         onChange={handleFileChange}
         className="hidden"
       />
-      <Button variant="outline" size="sm" onClick={handleExport}>
+      <Button 
+        variant="outline" 
+        size="sm" 
+        onClick={handleExport}
+        className="h-9 px-3 font-semibold active:scale-95 transition-all duration-150"
+      >
         <Download className="mr-2 h-4 w-4" />
         Exportar
       </Button>
-      <Button variant="outline" size="sm" onClick={handleImport}>
+      <Button 
+        variant="outline" 
+        size="sm" 
+        onClick={handleImport}
+        className="h-9 px-3 font-semibold active:scale-95 transition-all duration-150"
+      >
         <Upload className="mr-2 h-4 w-4" />
         Importar
       </Button>

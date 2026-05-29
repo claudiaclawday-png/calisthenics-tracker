@@ -18,10 +18,10 @@ export default function Header() {
   return (
     <>
       {/* Top Header */}
-      <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur-lg shadow-[0_1px_3px_-1px_rgba(0,0,0,0.07)]">
+      <header className="sticky top-0 z-50 border-b bg-background/90 backdrop-blur-xl shadow-[0_1px_3px_-1px_rgba(0,0,0,0.08)]">
         <div className="container flex h-14 items-center px-4 pt-safe">
           <div className="flex items-center">
-            <Link href="/" className="flex items-center space-x-2">
+            <Link href="/" className="flex items-center space-x-2 active:opacity-70 transition-opacity">
               <Logo />
             </Link>
           </div>
@@ -29,7 +29,7 @@ export default function Header() {
       </header>
 
       {/* Bottom Navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 z-50 flex h-[calc(4rem+env(safe-area-inset-bottom))] items-center justify-around border-t bg-background/95 backdrop-blur-lg shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] pb-safe">
+      <nav className="fixed bottom-0 left-0 right-0 z-50 flex h-[calc(4rem+env(safe-area-inset-bottom))] items-center justify-around border-t bg-background/90 backdrop-blur-xl shadow-[0_-4px_12px_-4px_rgba(0,0,0,0.08)] pb-safe">
         {navItems.map((item) => {
           const Icon = item.icon
           const isActive = pathname === item.href
@@ -38,16 +38,16 @@ export default function Header() {
               key={item.href}
               href={item.href}
               className={cn(
-                "relative flex h-full w-full flex-col items-center justify-center gap-1 transition-colors",
-                isActive ? "text-primary" : "text-muted-foreground hover:text-foreground",
+                "relative flex h-full w-full flex-col items-center justify-center gap-1.5 transition-all duration-200 active:scale-90",
+                isActive ? "text-primary" : "text-muted-foreground hover:text-foreground"
               )}
             >
               {/* Active indicator pill */}
               {isActive && (
-                <span className="absolute top-1 h-1 w-8 rounded-full bg-primary" />
+                <span className="absolute top-1.5 h-1 w-7 rounded-full bg-primary shadow-sm animate-in fade-in duration-200" />
               )}
-              <Icon className="h-5 w-5" />
-              <span className="text-[11px] font-medium leading-none">{item.label}</span>
+              <Icon className={cn("h-5 w-5 transition-transform duration-200", isActive && "scale-110")} />
+              <span className="text-[11px] font-bold leading-none">{item.label}</span>
             </Link>
           )
         })}

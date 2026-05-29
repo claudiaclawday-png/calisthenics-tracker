@@ -12,6 +12,7 @@ import VolumeWorkout from "@/components/volume-workout"
 import { Dumbbell, CheckCircle2, ArrowLeft } from "lucide-react"
 import Link from "next/link"
 
+
 export default function WorkoutPage() {
   const router = useRouter()
   const { toast } = useToast()
@@ -73,27 +74,27 @@ export default function WorkoutPage() {
     <div className="container px-4 py-6">
       <div className="mb-6 space-y-2">
         <div className="flex items-center gap-2 mb-1">
-          <Link href="/workout/select" className="text-muted-foreground hover:text-foreground transition-colors">
+          <Link href="/workout/select" className="text-muted-foreground hover:text-foreground transition-colors active:scale-90">
             <ArrowLeft className="h-5 w-5" />
           </Link>
-          <h1 className="text-2xl font-extrabold tracking-tight">Entrenamiento</h1>
+          <h1 className="text-3xl font-extrabold tracking-tight text-foreground">Entrenamiento</h1>
         </div>
         <div className="flex items-center gap-2 text-muted-foreground">
           <Dumbbell className="h-4 w-4" />
-          <p className="text-sm font-medium">
+          <p className="text-sm font-semibold">
             {currentWorkout.exercise} · {currentWorkout.workoutType}
           </p>
         </div>
       </div>
 
-      <Card className="shadow-sm border">
+      <Card className="shadow-md border-2 border-border">
         <CardHeader className="pb-3">
           <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 ring-1 ring-primary/20">
               <Dumbbell className="h-4 w-4 text-primary" />
             </div>
             <div>
-              <CardTitle className="text-lg">{currentWorkout.workoutType}</CardTitle>
+              <CardTitle className="text-lg font-bold">{currentWorkout.workoutType}</CardTitle>
               <CardDescription>
                 {currentWorkout.dayName} · {currentWorkout.exercise}
               </CardDescription>
@@ -103,14 +104,14 @@ export default function WorkoutPage() {
         <CardContent>
           {isCompleted ? (
             <div className="space-y-6 py-8 text-center">
-              <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-emerald-50 dark:bg-emerald-950">
+              <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-emerald-50 ring-2 ring-emerald-100">
                 <CheckCircle2 className="h-10 w-10 text-emerald-500" />
               </div>
               <div className="space-y-2">
-                <h3 className="text-2xl font-extrabold">¡Completado!</h3>
+                <h3 className="text-2xl font-extrabold text-foreground">¡Completado!</h3>
                 <p className="text-muted-foreground">Gran trabajo. Tu progreso fue guardado.</p>
               </div>
-              <Button size="lg" onClick={handleFinish} className="w-full h-12 text-base font-semibold shadow-sm">
+              <Button size="lg" onClick={handleFinish} className="w-full h-12 text-base font-bold shadow-lg active:scale-95 transition-all duration-150">
                 Volver al Inicio
               </Button>
             </div>
