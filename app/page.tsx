@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import WorkoutSchedule from "@/components/workout-schedule"
 import RecentWorkouts from "@/components/recent-workouts"
 import Logo from "@/components/logo"
-import { Dumbbell, History } from "lucide-react"
+import { History, Flame } from "lucide-react"
 
 export default function Home() {
   return (
@@ -12,7 +12,7 @@ export default function Home() {
       <div className="flex flex-col space-y-8">
         {/* Hero */}
         <div className="flex flex-col items-center space-y-4 text-center">
-          <div className="rounded-2xl bg-primary/10 p-5 shadow-sm ring-1 ring-primary/20">
+          <div className="rounded-2xl bg-accent/10 p-5 shadow-sm ring-1 ring-accent/20">
             <Logo size={48} showText={false} />
           </div>
           <div>
@@ -26,8 +26,8 @@ export default function Home() {
           <Card className="shadow-md border-2 border-border transition-shadow hover:shadow-lg">
             <CardHeader className="pb-3">
               <div className="flex items-center gap-2">
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 ring-1 ring-primary/20">
-                  <Dumbbell className="h-4 w-4 text-primary" />
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-accent/10 ring-1 ring-accent/20">
+                  <Flame className="h-4 w-4 text-accent" />
                 </div>
                 <CardTitle className="text-lg">Entrenamiento de Hoy</CardTitle>
               </div>
@@ -37,7 +37,7 @@ export default function Home() {
               <WorkoutSchedule />
               <div>
                 <Link href="/workout/select">
-                  <Button size="lg" className="w-full h-12 text-base font-bold shadow-md active:scale-95 transition-all duration-150">
+                  <Button size="lg" className="w-full h-12 text-base font-extrabold shadow-lg bg-accent text-accent-foreground hover:bg-accent/90 active:scale-95 transition-all duration-150">
                     Comenzar Entrenamiento
                   </Button>
                 </Link>
@@ -49,8 +49,8 @@ export default function Home() {
           <Card className="shadow-md border-2 border-border transition-shadow hover:shadow-lg">
             <CardHeader className="pb-3">
               <div className="flex items-center gap-2">
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-secondary ring-1 ring-border">
-                  <History className="h-4 w-4 text-secondary-foreground" />
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 ring-1 ring-primary/20">
+                  <History className="h-4 w-4 text-primary" />
                 </div>
                 <CardTitle className="text-lg">Entrenamientos Recientes</CardTitle>
               </div>
@@ -60,7 +60,7 @@ export default function Home() {
               <RecentWorkouts />
               <div>
                 <Link href="/history">
-                  <Button variant="outline" size="lg" className="w-full h-12 text-base font-bold active:scale-95 transition-all duration-150">
+                  <Button variant="outline" size="lg" className="w-full h-12 text-base font-extrabold active:scale-95 transition-all duration-150">
                     Ver Historial Completo
                   </Button>
                 </Link>

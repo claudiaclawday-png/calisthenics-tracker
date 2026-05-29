@@ -39,12 +39,12 @@ export default function Header() {
               href={item.href}
               className={cn(
                 "relative flex h-full w-full flex-col items-center justify-center gap-1.5 transition-all duration-200 active:scale-90",
-                isActive ? "text-primary" : "text-muted-foreground hover:text-foreground"
+                isActive ? "text-accent" : "text-muted-foreground hover:text-foreground"
               )}
             >
               {/* Active indicator pill */}
               {isActive && (
-                <span className="absolute top-1.5 h-1 w-7 rounded-full bg-primary shadow-sm animate-in fade-in duration-200" />
+                <span className="absolute top-1.5 h-1 w-7 rounded-full bg-accent shadow-sm animate-in fade-in duration-200" />
               )}
               <Icon className={cn("h-5 w-5 transition-transform duration-200", isActive && "scale-110")} />
               <span className="text-[11px] font-bold leading-none">{item.label}</span>

@@ -5,7 +5,6 @@ import { useWorkoutStore } from "@/lib/workout-store"
 import { formatDate } from "@/lib/utils"
 import { Trophy } from "lucide-react"
 
-
 export default function RecentWorkouts() {
   const [recentWorkouts, setRecentWorkouts] = useState<any[]>([])
   const { getRecentWorkouts } = useWorkoutStore()
@@ -38,7 +37,7 @@ export default function RecentWorkouts() {
             <p className="text-[11px] text-muted-foreground/70">{formatDate(workout.date)}</p>
           </div>
           <div className="text-right space-y-0.5">
-            <p className="text-2xl font-extrabold tabular-nums text-primary">{workout.totalReps}</p>
+            <p className="text-2xl font-extrabold tabular-nums text-accent">{workout.totalReps}</p>
             <p className="text-[10px] uppercase tracking-widest text-muted-foreground font-bold">reps</p>
             <p className="text-[11px] text-muted-foreground">
               {workout.workoutType === "Max Reps" && `Max: ${workout.maxReps}`}

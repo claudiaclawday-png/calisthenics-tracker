@@ -68,7 +68,7 @@ export default function SubMaxWorkout({ onComplete }: SubMaxWorkoutProps) {
   const getRepStatusColor = () => {
     const currentReps = reps[currentSet - 1]
     if (currentReps === targetReps) return "text-emerald-500"
-    if (currentReps > targetReps) return "text-amber-500"
+    if (currentReps > targetReps) return "text-accent"
     return "text-muted-foreground"
   }
 
@@ -77,8 +77,8 @@ export default function SubMaxWorkout({ onComplete }: SubMaxWorkoutProps) {
       {showTimer ? (
         <div className="space-y-6 py-4">
           <div className="text-center space-y-1">
-            <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-muted ring-1 ring-border">
-              <Trophy className="h-6 w-6 text-primary" />
+            <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-accent/10 ring-1 ring-accent/20">
+              <Trophy className="h-6 w-6 text-accent" />
             </div>
             <p className="text-sm font-extrabold uppercase tracking-widest text-muted-foreground">Descanso</p>
             <p className="text-xs text-muted-foreground">Serie {currentSet} de {totalSets} completada</p>
@@ -94,7 +94,7 @@ export default function SubMaxWorkout({ onComplete }: SubMaxWorkoutProps) {
               </p>
               <p className="text-sm text-muted-foreground">Objetivo: {targetReps} reps (50% del máximo)</p>
             </div>
-            <Progress value={(currentSet / totalSets) * 100} className="h-2.5" />
+            <Progress value={(currentSet / totalSets) * 100} className="h-2.5 bg-muted [&>div]:bg-accent" />
           </div>
 
           <Card className="shadow-md border-2 border-border">
@@ -107,20 +107,20 @@ export default function SubMaxWorkout({ onComplete }: SubMaxWorkoutProps) {
                       variant="outline"
                       size="icon"
                       onClick={() => handleRepChange(reps[currentSet - 1] - 1)}
-                      className="h-16 w-16 rounded-2xl border-2 shadow-sm active:scale-90 active:shadow-inner transition-all duration-150"
+                      className="h-16 w-16 rounded-2xl border-2 border-accent/30 shadow-sm active:scale-90 active:shadow-inner transition-all duration-150 hover:bg-accent/5 hover:border-accent/50"
                     >
-                      <Minus className="h-7 w-7" />
+                      <Minus className="h-7 w-7 text-accent" />
                     </Button>
-                    <span className="min-w-[110px] text-center text-7xl font-extrabold tabular-nums tracking-tight text-foreground">
+                    <span className="min-w-[110px] text-center text-7xl font-extrabold tabular-nums tracking-tight text-accent">
                       {reps[currentSet - 1]}
                     </span>
                     <Button
                       variant="outline"
                       size="icon"
                       onClick={() => handleRepChange(reps[currentSet - 1] + 1)}
-                      className="h-16 w-16 rounded-2xl border-2 shadow-sm active:scale-90 active:shadow-inner transition-all duration-150"
+                      className="h-16 w-16 rounded-2xl border-2 border-accent/30 shadow-sm active:scale-90 active:shadow-inner transition-all duration-150 hover:bg-accent/5 hover:border-accent/50"
                     >
-                      <Plus className="h-7 w-7" />
+                      <Plus className="h-7 w-7 text-accent" />
                     </Button>
                   </div>
                   <p className={cn("text-sm font-semibold", getRepStatusColor())}>{getRepStatus()}</p>
@@ -138,7 +138,9 @@ export default function SubMaxWorkout({ onComplete }: SubMaxWorkoutProps) {
                         onClick={() => handleRepChange(quickRep)}
                         className={cn(
                           "h-14 text-lg font-bold shadow-sm active:scale-95 transition-all duration-150",
-                          reps[currentSet - 1] === quickRep && "ring-2 ring-primary ring-offset-2 ring-offset-background"
+                          reps[currentSet - 1] === quickRep 
+                            ? "bg-accent text-accent-foreground hover:bg-accent/90 ring-2 ring-accent ring-offset-2 ring-offset-background" 
+                            : "border-accent/30 text-accent hover:bg-accent/5 hover:border-accent/50"
                         )}
                       >
                         {quickRep}
@@ -149,7 +151,7 @@ export default function SubMaxWorkout({ onComplete }: SubMaxWorkoutProps) {
 
                 <Button 
                   size="lg" 
-                  className="w-full h-14 text-base font-extrabold shadow-lg active:scale-95 active:shadow-md transition-all duration-150"
+                  className="w-full h-14 text-base font-extrabold shadow-xl bg-accent text-accent-foreground hover:bg-accent/90 active:scale-95 active:shadow-lg transition-all duration-150"
                   onClick={handleNextSet}
                 >
                   {currentSet < totalSets ? (
@@ -168,9 +170,9 @@ export default function SubMaxWorkout({ onComplete }: SubMaxWorkoutProps) {
                 <p className="mb-3 text-xs font-extrabold uppercase tracking-widest text-muted-foreground">Series anteriores</p>
                 <div className="space-y-2">
                   {reps.slice(0, currentSet - 1).map((rep, index) => (
-                    <div key={index} className="flex items-center justify-between rounded-xl bg-muted px-4 py-3">
+                    <div key={index} className="flex items-center justify-between rounded-xl bg-accent/5 px-4 py-3 border border-accent/10">
                       <span className="text-sm font-semibold text-muted-foreground">Serie {index + 1}</span>
-                      <span className="font-bold tabular-nums text-lg text-foreground">{rep} reps</span>
+                      <span className="font-bold tabular-nums text-lg text-accent">{rep} reps</span>
                     </div>
                   ))}
                 </div>

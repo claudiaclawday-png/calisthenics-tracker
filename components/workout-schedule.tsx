@@ -7,7 +7,6 @@ import { useWorkoutStore } from "@/lib/workout-store"
 import Link from "next/link"
 import { Edit3, Calendar } from "lucide-react"
 
-
 export default function WorkoutSchedule() {
   const [currentDay, setCurrentDay] = useState("")
   const [workoutType, setWorkoutType] = useState("")
@@ -31,13 +30,13 @@ export default function WorkoutSchedule() {
             <Calendar className="h-5 w-5 text-muted-foreground" />
           </div>
           <div>
-            <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest">Día</p>
+            <p className="text-xs font-extrabold text-muted-foreground uppercase tracking-widest">Día</p>
             <p className="text-lg font-extrabold leading-tight">{currentDay}</p>
           </div>
         </div>
         <Badge
           variant={isRestDay ? "secondary" : "default"}
-          className="px-3 py-1.5 text-sm font-bold"
+          className="px-3 py-1.5 text-sm font-extrabold bg-accent text-accent-foreground border-0"
         >
           {exercise}
         </Badge>
@@ -46,8 +45,8 @@ export default function WorkoutSchedule() {
       {!isRestDay && (
         <div className="space-y-3 rounded-2xl bg-muted/50 p-5 ring-1 ring-border">
           <div>
-            <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest">Tipo</p>
-            <p className="text-base font-bold">{workoutType}</p>
+            <p className="text-xs font-extrabold text-muted-foreground uppercase tracking-widest">Tipo</p>
+            <p className="text-base font-extrabold">{workoutType}</p>
           </div>
           <p className="text-sm text-muted-foreground leading-relaxed">
             {workoutType === "Max Reps" && "3 series al máximo con 5 minutos de descanso entre series."}
@@ -59,7 +58,7 @@ export default function WorkoutSchedule() {
       )}
 
       <Link href="/workout/select">
-        <Button variant="outline" size="lg" className="w-full h-11 font-bold active:scale-95 transition-all duration-150">
+        <Button variant="outline" size="lg" className="w-full h-11 font-extrabold active:scale-95 transition-all duration-150">
           <Edit3 className="mr-2 h-4 w-4" />
           Cambiar Entrenamiento
         </Button>

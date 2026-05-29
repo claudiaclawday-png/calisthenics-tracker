@@ -77,8 +77,8 @@ export default function VolumeWorkout({ onComplete }: VolumeWorkoutProps) {
       {showTimer ? (
         <div className="space-y-6 py-4">
           <div className="text-center space-y-1">
-            <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-muted ring-1 ring-border">
-              <Trophy className="h-6 w-6 text-primary" />
+            <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-accent/10 ring-1 ring-accent/20">
+              <Trophy className="h-6 w-6 text-accent" />
             </div>
             <p className="text-sm font-extrabold uppercase tracking-widest text-muted-foreground">Descanso</p>
             <p className="text-xs text-muted-foreground">Ciclo {currentCycle} · Rep {currentRep} completada</p>
@@ -96,20 +96,20 @@ export default function VolumeWorkout({ onComplete }: VolumeWorkoutProps) {
                 Repetición {currentRep} de {maxReps}
               </p>
             </div>
-            <Progress value={calculateProgress()} className="h-2.5" />
+            <Progress value={calculateProgress()} className="h-2.5 bg-muted [&>div]:bg-accent" />
           </div>
 
           <Card className="shadow-md border-2 border-border">
             <CardContent className="pt-6">
               <div className="space-y-8">
                 <div className="flex flex-col items-center justify-center space-y-3">
-                  <span className="text-8xl font-extrabold tabular-nums tracking-tight text-primary">{currentRep}</span>
+                  <span className="text-8xl font-extrabold tabular-nums tracking-tight text-accent">{currentRep}</span>
                   <p className="text-sm font-semibold text-muted-foreground">Repeticiones a realizar</p>
                 </div>
 
                 <Button 
                   size="lg" 
-                  className="w-full h-14 text-base font-extrabold shadow-lg active:scale-95 active:shadow-md transition-all duration-150"
+                  className="w-full h-14 text-base font-extrabold shadow-xl bg-accent text-accent-foreground hover:bg-accent/90 active:scale-95 active:shadow-lg transition-all duration-150"
                   onClick={handleCompleteRep}
                 >
                   <Check className="mr-2 h-5 w-5" />
@@ -133,9 +133,9 @@ export default function VolumeWorkout({ onComplete }: VolumeWorkoutProps) {
                       className={cn(
                         "flex h-11 w-11 items-center justify-center rounded-xl text-sm font-bold transition-all duration-200",
                         isCompleted
-                          ? "bg-primary text-primary-foreground shadow-md"
+                          ? "bg-accent text-accent-foreground shadow-md"
                           : isCurrent
-                            ? "border-2 border-primary bg-background shadow-md ring-2 ring-primary/20"
+                            ? "border-2 border-accent bg-background shadow-md ring-2 ring-accent/20"
                             : "bg-muted text-muted-foreground border border-border"
                       )}
                     >
@@ -153,9 +153,9 @@ export default function VolumeWorkout({ onComplete }: VolumeWorkoutProps) {
                 <p className="mb-3 text-xs font-extrabold uppercase tracking-widest text-muted-foreground">Ciclos completados</p>
                 <div className="space-y-2">
                   {completedReps.slice(0, currentCycle - 1).map((cycle, index) => (
-                    <div key={index} className="flex items-center justify-between rounded-xl bg-muted px-4 py-3">
+                    <div key={index} className="flex items-center justify-between rounded-xl bg-accent/5 px-4 py-3 border border-accent/10">
                       <span className="text-sm font-semibold text-muted-foreground">Ciclo {index + 1}</span>
-                      <span className="font-bold tabular-nums text-lg text-foreground">
+                      <span className="font-bold tabular-nums text-lg text-accent">
                         {cycle.reduce((a, b) => a + b, 0)} reps
                       </span>
                     </div>

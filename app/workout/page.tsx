@@ -62,7 +62,7 @@ export default function WorkoutPage() {
     return (
       <div className="container flex h-[60vh] items-center justify-center p-4">
         <div className="text-center space-y-3">
-          <div className="mx-auto h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+          <div className="mx-auto h-8 w-8 animate-spin rounded-full border-2 border-accent border-t-transparent" />
           <p className="text-muted-foreground">Cargando...</p>
         </div>
       </div>
@@ -89,8 +89,8 @@ export default function WorkoutPage() {
       <Card className="shadow-md border-2 border-border">
         <CardHeader className="pb-3">
           <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 ring-1 ring-primary/20">
-              <Dumbbell className="h-4 w-4 text-primary" />
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent/10 ring-1 ring-accent/20">
+              <Dumbbell className="h-4 w-4 text-accent" />
             </div>
             <div>
               <CardTitle className="text-lg font-bold">{currentWorkout.workoutType}</CardTitle>
@@ -103,14 +103,14 @@ export default function WorkoutPage() {
         <CardContent>
           {isCompleted ? (
             <div className="space-y-6 py-8 text-center">
-              <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-primary/10 ring-2 ring-primary/20">
-                <CheckCircle2 className="h-10 w-10 text-primary" />
+              <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-accent/10 ring-2 ring-accent/20">
+                <CheckCircle2 className="h-10 w-10 text-accent" />
               </div>
               <div className="space-y-2">
                 <h3 className="text-2xl font-extrabold text-foreground">¡Completado!</h3>
                 <p className="text-muted-foreground">Gran trabajo. Tu progreso fue guardado.</p>
               </div>
-              <Button size="lg" onClick={handleFinish} className="w-full h-14 text-base font-extrabold shadow-xl active:scale-95 transition-all duration-150">
+              <Button size="lg" onClick={handleFinish} className="w-full h-14 text-base font-extrabold shadow-xl bg-accent text-accent-foreground hover:bg-accent/90 active:scale-95 transition-all duration-150">
                 Volver al Inicio
               </Button>
             </div>

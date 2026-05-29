@@ -55,10 +55,10 @@ export default function SelectWorkoutPage() {
       </div>
 
       {suggestedWorkout && (
-        <div className="mb-8 rounded-2xl border-2 border-primary/40 bg-card p-5 shadow-md ring-1 ring-primary/20">
+        <div className="mb-8 rounded-2xl border-2 border-accent/40 bg-card p-5 shadow-md ring-1 ring-accent/20">
           <div className="flex items-center gap-2 mb-3">
-            <Sparkles className="h-5 w-5 text-primary" />
-            <span className="text-xs font-extrabold text-primary uppercase tracking-widest">Sugerido para hoy</span>
+            <Sparkles className="h-5 w-5 text-accent" />
+            <span className="text-xs font-extrabold text-accent uppercase tracking-widest">Sugerido para hoy</span>
           </div>
           <div className="flex items-center justify-between">
             <div className="space-y-0.5">
@@ -95,13 +95,13 @@ export default function SelectWorkoutPage() {
                     "relative flex flex-col items-center justify-center gap-2 rounded-2xl border-2 p-6 transition-all duration-200",
                     "active:scale-[0.96] active:shadow-inner",
                     isSelected
-                      ? "border-primary bg-primary text-primary-foreground shadow-lg"
-                      : "border-border bg-card text-foreground hover:border-primary/50 hover:shadow-md hover:bg-muted/50"
+                      ? "border-accent bg-accent text-accent-foreground shadow-lg"
+                      : "border-border bg-card text-foreground hover:border-accent/50 hover:shadow-md hover:bg-muted/50"
                   )}
                 >
                   {isSelected && (
-                    <div className="absolute top-3 right-3 flex h-6 w-6 items-center justify-center rounded-full bg-primary-foreground shadow-sm">
-                      <Check className="h-3.5 w-3.5 text-primary" strokeWidth={3} />
+                    <div className="absolute top-3 right-3 flex h-6 w-6 items-center justify-center rounded-full bg-accent-foreground shadow-sm">
+                      <Check className="h-3.5 w-3.5 text-accent" strokeWidth={3} />
                     </div>
                   )}
                   <span className="text-lg font-extrabold">{exercise}</span>
@@ -131,25 +131,25 @@ export default function SelectWorkoutPage() {
                     "flex w-full items-center gap-4 rounded-2xl border-2 p-4 text-left transition-all duration-200",
                     "active:scale-[0.98] active:shadow-inner",
                     isSelected
-                      ? "border-primary bg-primary text-primary-foreground shadow-lg"
-                      : "border-border bg-card text-foreground hover:border-primary/50 hover:shadow-md hover:bg-muted/50"
+                      ? "border-accent bg-accent text-accent-foreground shadow-lg"
+                      : "border-border bg-card text-foreground hover:border-accent/50 hover:shadow-md hover:bg-muted/50"
                   )}
                 >
                   <div className={cn(
                     "flex h-12 w-12 shrink-0 items-center justify-center rounded-xl",
-                    isSelected ? "bg-primary-foreground/20" : "bg-muted"
+                    isSelected ? "bg-accent-foreground/20" : "bg-muted"
                   )}>
-                    <Icon className={cn("h-6 w-6", isSelected ? "text-primary-foreground" : "text-muted-foreground")} />
+                    <Icon className={cn("h-6 w-6", isSelected ? "text-accent-foreground" : "text-muted-foreground")} />
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="font-extrabold text-base">{type}</p>
-                    <p className={cn("text-sm", isSelected ? "text-primary-foreground/80" : "text-muted-foreground")}>
+                    <p className={cn("text-sm", isSelected ? "text-accent-foreground/80" : "text-muted-foreground")}>
                       {config.desc}
                     </p>
                   </div>
                   {isSelected ? (
-                    <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary-foreground shadow-sm">
-                      <Check className="h-4 w-4 text-primary" strokeWidth={3} />
+                    <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-accent-foreground shadow-sm">
+                      <Check className="h-4 w-4 text-accent" strokeWidth={3} />
                     </div>
                   ) : (
                     <div className="h-7 w-7 shrink-0 rounded-full border-2 border-muted-foreground/30" />
