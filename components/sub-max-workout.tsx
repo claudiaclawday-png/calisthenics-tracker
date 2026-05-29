@@ -67,51 +67,57 @@ export default function SubMaxWorkout({ onComplete }: SubMaxWorkoutProps) {
   return (
     <div className="space-y-6">
       {showTimer ? (
-        <div className="space-y-4">
-          <h3 className="text-center text-xl font-semibold">Descanso</h3>
+        <div className="space-y-6 py-4">
+          <div className="text-center space-y-1">
+            <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">Descanso</p>
+            <p className="text-xs text-muted-foreground">Serie {currentSet} de {totalSets} completada</p>
+          </div>
           <WorkoutTimer duration={restTime} onComplete={handleTimerComplete} autoStart={true} />
         </div>
       ) : (
         <>
-          <div className="text-center">
-            <h3 className="text-xl font-semibold">
-              Serie {currentSet} de {totalSets}
-            </h3>
-            <p className="text-muted-foreground">Objetivo: {targetReps} reps (50% del máximo)</p>
+          <div className="space-y-3">
+            <div className="text-center space-y-1">
+              <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+                Serie {currentSet} de {totalSets}
+              </p>
+              <p className="text-xs text-muted-foreground">Objetivo: {targetReps} reps (50% del máximo)</p>
+            </div>
+            <Progress value={(currentSet / totalSets) * 100} className="h-2" />
           </div>
 
-          <Progress value={(currentSet / totalSets) * 100} className="h-2" />
-
-          <Card>
+          <Card className="shadow-sm border">
             <CardContent className="pt-6">
-              <div className="space-y-6">
-                <div className="flex flex-col items-center justify-center space-y-3">
-                  <div className="flex items-center gap-4">
+              <div className="space-y-8">
+                {/* Counter */}
+                <div className="flex flex-col items-center justify-center space-y-2">
+                  <div className="flex items-center gap-6">
                     <Button
                       variant="outline"
-                      size="icon-xl"
+                      size="icon"
                       onClick={() => handleRepChange(reps[currentSet - 1] - 1)}
-                      className="rounded-full"
+                      className="h-14 w-14 rounded-2xl border-2 shadow-sm"
                     >
                       <Minus className="h-6 w-6" />
                     </Button>
-                    <span className="min-w-[80px] text-center text-6xl font-bold tabular-nums">
+                    <span className="min-w-[100px] text-center text-7xl font-extrabold tabular-nums tracking-tight">
                       {reps[currentSet - 1]}
                     </span>
                     <Button
                       variant="outline"
-                      size="icon-xl"
+                      size="icon"
                       onClick={() => handleRepChange(reps[currentSet - 1] + 1)}
-                      className="rounded-full"
+                      className="h-14 w-14 rounded-2xl border-2 shadow-sm"
                     >
                       <Plus className="h-6 w-6" />
                     </Button>
                   </div>
-                  <p className="text-sm text-muted-foreground">{getRepStatus()}</p>
+                  <p className="text-sm font-medium text-muted-foreground">{getRepStatus()}</p>
                 </div>
 
-                <div className="space-y-2">
-                  <p className="text-center text-xs font-medium text-muted-foreground">Selección rápida</p>
+                {/* Quick Select */}
+                <div className="space-y-3">
+                  <p className="text-center text-xs font-bold uppercase tracking-wide text-muted-foreground">Selección rápida</p>
                   <div className="grid grid-cols-4 gap-2">
                     {QUICK_REPS.map((quickRep) => (
                       <Button
@@ -119,7 +125,7 @@ export default function SubMaxWorkout({ onComplete }: SubMaxWorkoutProps) {
                         variant={reps[currentSet - 1] === quickRep ? "default" : "outline"}
                         size="lg"
                         onClick={() => handleRepChange(quickRep)}
-                        className="text-lg font-semibold"
+                        className="h-12 text-lg font-bold shadow-sm"
                       >
                         {quickRep}
                       </Button>
@@ -127,7 +133,7 @@ export default function SubMaxWorkout({ onComplete }: SubMaxWorkoutProps) {
                   </div>
                 </div>
 
-                <Button size="xl" className="w-full" onClick={handleNextSet}>
+                <Button size="lg" className="w-full h-12 text-base font-semibold shadow-sm" onClick={handleNextSet}>
                   {currentSet < totalSets ? "Siguiente Serie" : "Completar Entrenamiento"}
                 </Button>
               </div>
@@ -135,14 +141,14 @@ export default function SubMaxWorkout({ onComplete }: SubMaxWorkoutProps) {
           </Card>
 
           {currentSet > 1 && (
-            <Card>
-              <CardContent className="pt-4">
-                <h4 className="mb-3 text-sm font-semibold">Series anteriores</h4>
+            <Card className="shadow-sm border">
+              <CardContent className="pt-5">
+                <p className="mb-3 text-xs font-bold uppercase tracking-wide text-muted-foreground">Series anteriores</p>
                 <div className="space-y-2">
                   {reps.slice(0, currentSet - 1).map((rep, index) => (
-                    <div key={index} className="flex items-center justify-between">
-                      <span className="text-sm text-muted-foreground">Serie {index + 1}</span>
-                      <span className="font-semibold tabular-nums">{rep} reps</span>
+                    <div key={index} className="flex items-center justify-between rounded-lg bg-muted/50 px-3 py-2">
+                      <span className="text-sm font-medium text-muted-foreground">Serie {index + 1}</span>
+                      <span className="font-bold tabular-nums">{rep} reps</span>
                     </div>
                   ))}
                 </div>
@@ -154,4 +160,3 @@ export default function SubMaxWorkout({ onComplete }: SubMaxWorkoutProps) {
     </div>
   )
 }
-

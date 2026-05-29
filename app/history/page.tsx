@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useWorkoutStore } from "@/lib/workout-store"
 import { formatDate } from "@/lib/utils"
-import { BarChart, Calendar } from "lucide-react"
+import { Calendar, BarChart3, Trophy, Dumbbell } from "lucide-react"
 import HistoryActions from "@/components/history-actions"
 
 export default function HistoryPage() {
@@ -47,74 +47,89 @@ export default function HistoryPage() {
 
   if (workouts.length === 0) {
     return (
-      <div className="container flex h-[70vh] items-center justify-center px-4 py-6">
-        <div className="text-center">
-          <h2 className="text-xl font-semibold">Sin entrenamientos</h2>
-          <p className="text-muted-foreground">Completa tu primer entrenamiento para ver tu historial</p>
+      <div className="container flex h-[60vh] items-center justify-center px-4 py-6">
+        <div className="text-center space-y-4">
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-muted">
+            <Trophy className="h-8 w-8 text-muted-foreground/60" />
+          </div>
+          <div className="space-y-1">
+            <h2 className="text-xl font-bold">Sin entrenamientos</h2>
+            <p className="text-muted-foreground text-sm">Completa tu primer entrenamiento para ver tu historial</p>
+          </div>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="container px-4 py-6 pb-24">
+    <div className="container px-4 py-6">
       <div className="mb-6 space-y-4">
         <div className="flex items-start justify-between">
-          <div className="space-y-2">
-            <h1 className="text-2xl font-bold tracking-tight">Historial</h1>
-            <p className="text-muted-foreground">Tu progreso y entrenamientos anteriores</p>
+          <div className="space-y-1">
+            <h1 className="text-2xl font-extrabold tracking-tight">Historial</h1>
+            <p className="text-muted-foreground text-sm">Tu progreso y entrenamientos anteriores</p>
           </div>
           <HistoryActions />
         </div>
       </div>
 
       <Tabs defaultValue="by-date">
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="by-date" className="flex items-center">
+        <TabsList className="grid w-full grid-cols-2 h-11 bg-muted/50">
+          <TabsTrigger value="by-date" className="flex items-center text-sm font-semibold data-[state=active]:shadow-sm">
             <Calendar className="mr-2 h-4 w-4" />
             Por Fecha
           </TabsTrigger>
-          <TabsTrigger value="by-exercise" className="flex items-center">
-            <BarChart className="mr-2 h-4 w-4" />
+          <TabsTrigger value="by-exercise" className="flex items-center text-sm font-semibold data-[state=active]:shadow-sm">
+            <BarChart3 className="mr-2 h-4 w-4" />
             Por Ejercicio
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="by-date" className="mt-4 space-y-6">
+        <TabsContent value="by-date" className="mt-5 space-y-6">
           {dateGroups.map((group, index) => (
             <div key={index} className="space-y-3">
-              <h3 className="font-semibold">{group.date}</h3>
+              <div className="flex items-center gap-2">
+                <Calendar className="h-4 w-4 text-muted-foreground" />
+                <h3 className="text-sm font-bold uppercase tracking-wide text-muted-foreground">{group.date}</h3>
+              </div>
               {group.workouts.map((workout, wIndex) => (
-                <Card key={wIndex}>
+                <Card key={wIndex} className="shadow-sm border">
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-base">{workout.exercise}</CardTitle>
-                    <CardDescription>{workout.workoutType}</CardDescription>
+                    <div className="flex items-center gap-2">
+                      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
+                        <Dumbbell className="h-4 w-4 text-primary" />
+                      </div>
+                      <div>
+                        <CardTitle className="text-base font-bold">{workout.exercise}</CardTitle>
+                        <CardDescription>{workout.workoutType}</CardDescription>
+                      </div>
+                    </div>
                   </CardHeader>
                   <CardContent>
-                    <div className="space-y-2 text-sm">
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Total de repeticiones</span>
-                        <span className="font-bold tabular-nums">{workout.totalReps}</span>
+                    <div className="grid grid-cols-2 gap-4 text-sm">
+                      <div className="space-y-1">
+                        <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Total reps</p>
+                        <p className="text-2xl font-bold tabular-nums text-primary">{workout.totalReps}</p>
                       </div>
 
                       {workout.workoutType === "Max Reps" && (
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">Repetición máxima</span>
-                          <span className="font-bold tabular-nums">{workout.maxReps}</span>
+                        <div className="space-y-1">
+                          <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Máxima</p>
+                          <p className="text-2xl font-bold tabular-nums">{workout.maxReps}</p>
                         </div>
                       )}
 
                       {workout.workoutType === "Sub Max" && (
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">Objetivo por serie</span>
-                          <span className="font-bold tabular-nums">{workout.targetReps}</span>
+                        <div className="space-y-1">
+                          <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Objetivo</p>
+                          <p className="text-2xl font-bold tabular-nums">{workout.targetReps}</p>
                         </div>
                       )}
 
                       {workout.workoutType === "Volumen Escalera" && (
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">Ciclos completados</span>
-                          <span className="font-bold tabular-nums">{workout.cycles}</span>
+                        <div className="space-y-1">
+                          <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Ciclos</p>
+                          <p className="text-2xl font-bold tabular-nums">{workout.cycles}</p>
                         </div>
                       )}
                     </div>
@@ -125,44 +140,51 @@ export default function HistoryPage() {
           ))}
         </TabsContent>
 
-        <TabsContent value="by-exercise" className="mt-4 space-y-6">
+        <TabsContent value="by-exercise" className="mt-5 space-y-6">
           {exerciseGroups.map((group, index) => (
             <div key={index} className="space-y-3">
-              <h3 className="font-semibold">{group.name}</h3>
+              <h3 className="text-sm font-bold uppercase tracking-wide text-muted-foreground">{group.name}</h3>
               {group.workouts.length === 0 ? (
                 <p className="text-sm text-muted-foreground">Sin entrenamientos registrados</p>
               ) : (
                 group.workouts.map((workout, wIndex) => (
-                  <Card key={wIndex}>
+                  <Card key={wIndex} className="shadow-sm border">
                     <CardHeader className="pb-2">
-                      <CardTitle className="text-base">{workout.workoutType}</CardTitle>
-                      <CardDescription>{formatDate(workout.date)}</CardDescription>
+                      <div className="flex items-center gap-2">
+                        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
+                          <Dumbbell className="h-4 w-4 text-primary" />
+                        </div>
+                        <div>
+                          <CardTitle className="text-base font-bold">{workout.workoutType}</CardTitle>
+                          <CardDescription>{formatDate(workout.date)}</CardDescription>
+                        </div>
+                      </div>
                     </CardHeader>
                     <CardContent>
-                      <div className="space-y-2 text-sm">
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">Total de repeticiones</span>
-                          <span className="font-bold tabular-nums">{workout.totalReps}</span>
+                      <div className="grid grid-cols-2 gap-4 text-sm">
+                        <div className="space-y-1">
+                          <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Total reps</p>
+                          <p className="text-2xl font-bold tabular-nums text-primary">{workout.totalReps}</p>
                         </div>
 
                         {workout.workoutType === "Max Reps" && (
-                          <div className="flex justify-between">
-                            <span className="text-muted-foreground">Repetición máxima</span>
-                            <span className="font-bold tabular-nums">{workout.maxReps}</span>
+                          <div className="space-y-1">
+                            <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Máxima</p>
+                            <p className="text-2xl font-bold tabular-nums">{workout.maxReps}</p>
                           </div>
                         )}
 
                         {workout.workoutType === "Sub Max" && (
-                          <div className="flex justify-between">
-                            <span className="text-muted-foreground">Objetivo por serie</span>
-                            <span className="font-bold tabular-nums">{workout.targetReps}</span>
+                          <div className="space-y-1">
+                            <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Objetivo</p>
+                            <p className="text-2xl font-bold tabular-nums">{workout.targetReps}</p>
                           </div>
                         )}
 
                         {workout.workoutType === "Volumen Escalera" && (
-                          <div className="flex justify-between">
-                            <span className="text-muted-foreground">Ciclos completados</span>
-                            <span className="font-bold tabular-nums">{workout.cycles}</span>
+                          <div className="space-y-1">
+                            <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Ciclos</p>
+                            <p className="text-2xl font-bold tabular-nums">{workout.cycles}</p>
                           </div>
                         )}
                       </div>
@@ -177,4 +199,3 @@ export default function HistoryPage() {
     </div>
   )
 }
-

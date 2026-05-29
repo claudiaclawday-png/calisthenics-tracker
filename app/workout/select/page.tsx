@@ -5,7 +5,8 @@ import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useWorkoutStore } from "@/lib/workout-store"
-import { ArrowRight, Dumbbell, Zap, TrendingUp } from "lucide-react"
+import { ArrowRight, Dumbbell, Zap, TrendingUp, Sparkles } from "lucide-react"
+import { cn } from "@/lib/utils"
 
 export default function SelectWorkoutPage() {
   const router = useRouter()
@@ -37,39 +38,37 @@ export default function SelectWorkoutPage() {
     (type) => type !== "Descanso",
   )
 
-  const workoutTypeIcons: Record<string, typeof Dumbbell> = {
-    "Max Reps": Zap,
-    "Sub Max": TrendingUp,
-    "Volumen Escalera": Dumbbell,
-  }
-
-  const workoutTypeDescriptions: Record<string, string> = {
-    "Max Reps": "3 series al máximo, 5 min descanso",
-    "Sub Max": "10 series al 50%, 1 min descanso",
-    "Volumen Escalera": "Escalera 1-N, 5 ciclos, 30s descanso",
+  const workoutTypeConfig: Record<string, { icon: typeof Dumbbell; color: string; desc: string }> = {
+    "Max Reps": { icon: Zap, color: "text-amber-500", desc: "3 series al máximo, 5 min descanso" },
+    "Sub Max": { icon: TrendingUp, color: "text-emerald-500", desc: "10 series al 50%, 1 min descanso" },
+    "Volumen Escalera": { icon: Dumbbell, color: "text-sky-500", desc: "Escalera 1→N, 5 ciclos, 30s descanso" },
   }
 
   return (
-    <div className="container px-4 py-6">
-      <div className="mb-6 space-y-2">
-        <h1 className="text-2xl font-bold tracking-tight">Seleccionar Entrenamiento</h1>
-        <p className="text-muted-foreground">Elige ejercicio y tipo</p>
+    <div className="container px-4 py-6 pb-8">
+      <div className="mb-8 space-y-2">
+        <h1 className="text-2xl font-extrabold tracking-tight">Seleccionar Entrenamiento</h1>
+        <p className="text-muted-foreground">Elige ejercicio y tipo de sesión</p>
       </div>
 
       {suggestedWorkout && (
-        <Card className="mb-6 border-primary/30 bg-primary/5">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-base">Entrenamiento sugerido</CardTitle>
+        <Card className="mb-8 border-primary/20 bg-primary/5 shadow-sm">
+          <CardHeader className="pb-2">
+            <div className="flex items-center gap-2">
+              <Sparkles className="h-4 w-4 text-primary" />
+              <CardTitle className="text-sm font-semibold text-primary">Entrenamiento sugerido</CardTitle>
+            </div>
           </CardHeader>
           <CardContent>
             <div className="flex items-center justify-between">
-              <div>
-                <p className="font-semibold">{suggestedWorkout.exercise}</p>
+              <div className="space-y-0.5">
+                <p className="font-bold">{suggestedWorkout.exercise}</p>
                 <p className="text-sm text-muted-foreground">{suggestedWorkout.workoutType}</p>
               </div>
               <Button
                 variant="outline"
                 size="sm"
+                className="h-9 bg-background"
                 onClick={() => {
                   setSelectedExercise(suggestedWorkout.exercise)
                   setSelectedWorkoutType(suggestedWorkout.workoutType)
@@ -82,51 +81,70 @@ export default function SelectWorkoutPage() {
         </Card>
       )}
 
-      <div className="space-y-6">
-        <div className="space-y-3">
-          <h2 className="text-sm font-semibold text-muted-foreground">Ejercicio</h2>
+      <div className="space-y-8">
+        {/* Exercise Selection */}
+        <div className="space-y-4">
+          <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">Ejercicio</h2>
           <div className="grid grid-cols-2 gap-3">
             {exercises.map((exercise) => (
-              <Button
+              <button
                 key={exercise}
-                variant={selectedExercise === exercise ? "default" : "outline"}
-                size="xl"
                 onClick={() => setSelectedExercise(exercise)}
-                className="text-base"
+                className={cn(
+                  "relative flex flex-col items-center justify-center gap-2 rounded-2xl border-2 p-5 transition-all",
+                  selectedExercise === exercise
+                    ? "border-primary bg-primary/5 shadow-sm"
+                    : "border-border bg-card hover:border-muted-foreground/30 hover:bg-muted/50"
+                )}
               >
-                {exercise}
-              </Button>
+                <span className="text-base font-bold">{exercise}</span>
+                {selectedExercise === exercise && (
+                  <span className="absolute top-2 right-2 h-2.5 w-2.5 rounded-full bg-primary" />
+                )}
+              </button>
             ))}
           </div>
         </div>
 
-        <div className="space-y-3">
-          <h2 className="text-sm font-semibold text-muted-foreground">Tipo de entrenamiento</h2>
+        {/* Workout Type Selection */}
+        <div className="space-y-4">
+          <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">Tipo de entrenamiento</h2>
           <div className="space-y-3">
             {workoutTypes.map((type) => {
-              const Icon = workoutTypeIcons[type] || Dumbbell
+              const config = workoutTypeConfig[type] || { icon: Dumbbell, color: "text-gray-500", desc: "" }
+              const Icon = config.icon
+              const isSelected = selectedWorkoutType === type
+
               return (
-                <Button
+                <button
                   key={type}
-                  variant={selectedWorkoutType === type ? "default" : "outline"}
-                  size="xl"
                   onClick={() => setSelectedWorkoutType(type)}
-                  className="w-full justify-start"
+                  className={cn(
+                    "flex w-full items-center gap-4 rounded-2xl border-2 p-4 text-left transition-all",
+                    isSelected
+                      ? "border-primary bg-primary/5 shadow-sm"
+                      : "border-border bg-card hover:border-muted-foreground/30 hover:bg-muted/50"
+                  )}
                 >
-                  <Icon className="mr-3 h-5 w-5" />
-                  <div className="text-left">
-                    <p className="text-base font-semibold">{type}</p>
-                    <p className="text-xs font-normal opacity-80">{workoutTypeDescriptions[type]}</p>
+                  <div className={cn("flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-muted", config.color)}>
+                    <Icon className="h-5 w-5" />
                   </div>
-                </Button>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-bold text-base">{type}</p>
+                    <p className="text-sm text-muted-foreground">{config.desc}</p>
+                  </div>
+                  {isSelected && (
+                    <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-primary" />
+                  )}
+                </button>
               )
             })}
           </div>
         </div>
 
         <Button
-          size="xl"
-          className="w-full"
+          size="lg"
+          className="w-full h-12 text-base font-semibold shadow-sm"
           onClick={handleStartWorkout}
           disabled={!selectedExercise || !selectedWorkoutType}
         >
@@ -137,4 +155,3 @@ export default function SelectWorkoutPage() {
     </div>
   )
 }
-

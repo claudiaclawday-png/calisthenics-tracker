@@ -74,32 +74,36 @@ export default function VolumeWorkout({ onComplete }: VolumeWorkoutProps) {
   return (
     <div className="space-y-6">
       {showTimer ? (
-        <div className="space-y-4">
-          <h3 className="text-center text-xl font-semibold">Descanso</h3>
+        <div className="space-y-6 py-4">
+          <div className="text-center space-y-1">
+            <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">Descanso</p>
+            <p className="text-xs text-muted-foreground">Ciclo {currentCycle} · Rep {currentRep} completada</p>
+          </div>
           <WorkoutTimer duration={restTime} onComplete={handleTimerComplete} autoStart={true} />
         </div>
       ) : (
         <>
-          <div className="text-center">
-            <h3 className="text-xl font-semibold">
-              Ciclo {currentCycle} de {totalCycles}
-            </h3>
-            <p className="text-muted-foreground">
-              Repeticiones: {currentRep} de {maxReps}
-            </p>
+          <div className="space-y-3">
+            <div className="text-center space-y-1">
+              <p className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+                Ciclo {currentCycle} de {totalCycles}
+              </p>
+              <p className="text-xs text-muted-foreground">
+                Repetición {currentRep} de {maxReps}
+              </p>
+            </div>
+            <Progress value={calculateProgress()} className="h-2" />
           </div>
 
-          <Progress value={calculateProgress()} className="h-2" />
-
-          <Card>
+          <Card className="shadow-sm border">
             <CardContent className="pt-6">
-              <div className="space-y-6">
-                <div className="flex flex-col items-center justify-center space-y-3">
-                  <span className="text-7xl font-bold tabular-nums">{currentRep}</span>
-                  <p className="text-sm text-muted-foreground">Repeticiones a realizar</p>
+              <div className="space-y-8">
+                <div className="flex flex-col items-center justify-center space-y-2">
+                  <span className="text-8xl font-extrabold tabular-nums tracking-tight text-primary">{currentRep}</span>
+                  <p className="text-sm font-medium text-muted-foreground">Repeticiones a realizar</p>
                 </div>
 
-                <Button size="xl" className="w-full" onClick={handleCompleteRep}>
+                <Button size="lg" className="w-full h-12 text-base font-semibold shadow-sm" onClick={handleCompleteRep}>
                   <Check className="mr-2 h-5 w-5" />
                   Completar {currentRep} {currentRep === 1 ? "rep" : "reps"}
                 </Button>
@@ -107,9 +111,9 @@ export default function VolumeWorkout({ onComplete }: VolumeWorkoutProps) {
             </CardContent>
           </Card>
 
-          <Card>
-            <CardContent className="pt-4">
-              <h4 className="mb-3 text-sm font-semibold">Progreso del ciclo</h4>
+          <Card className="shadow-sm border">
+            <CardContent className="pt-5">
+              <p className="mb-3 text-xs font-bold uppercase tracking-wide text-muted-foreground">Progreso del ciclo</p>
               <div className="flex flex-wrap gap-2">
                 {Array.from({ length: maxReps }, (_, i) => i + 1).map((rep) => {
                   const isCompleted = completedReps[currentCycle - 1]?.includes(rep)
@@ -118,11 +122,11 @@ export default function VolumeWorkout({ onComplete }: VolumeWorkoutProps) {
                   return (
                     <div
                       key={rep}
-                      className={`flex h-10 w-10 items-center justify-center rounded-full text-sm font-semibold ${
+                      className={`flex h-10 w-10 items-center justify-center rounded-xl text-sm font-bold transition-colors ${
                         isCompleted
-                          ? "bg-primary text-primary-foreground"
+                          ? "bg-primary text-primary-foreground shadow-sm"
                           : isCurrent
-                            ? "border-2 border-primary bg-background"
+                            ? "border-2 border-primary bg-background shadow-sm"
                             : "bg-muted text-muted-foreground"
                       }`}
                     >
@@ -135,14 +139,14 @@ export default function VolumeWorkout({ onComplete }: VolumeWorkoutProps) {
           </Card>
 
           {currentCycle > 1 && (
-            <Card>
-              <CardContent className="pt-4">
-                <h4 className="mb-3 text-sm font-semibold">Ciclos completados</h4>
+            <Card className="shadow-sm border">
+              <CardContent className="pt-5">
+                <p className="mb-3 text-xs font-bold uppercase tracking-wide text-muted-foreground">Ciclos completados</p>
                 <div className="space-y-2">
                   {completedReps.slice(0, currentCycle - 1).map((cycle, index) => (
-                    <div key={index} className="flex items-center justify-between">
-                      <span className="text-sm text-muted-foreground">Ciclo {index + 1}</span>
-                      <span className="font-semibold tabular-nums">
+                    <div key={index} className="flex items-center justify-between rounded-lg bg-muted/50 px-3 py-2">
+                      <span className="text-sm font-medium text-muted-foreground">Ciclo {index + 1}</span>
+                      <span className="font-bold tabular-nums">
                         {cycle.reduce((a, b) => a + b, 0)} reps
                       </span>
                     </div>
@@ -156,4 +160,3 @@ export default function VolumeWorkout({ onComplete }: VolumeWorkoutProps) {
     </div>
   )
 }
-

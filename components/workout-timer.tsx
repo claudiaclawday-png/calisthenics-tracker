@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
-import { Timer, Play, Pause, RotateCcw } from "lucide-react"
+import { Play, Pause, RotateCcw } from "lucide-react"
 
 interface WorkoutTimerProps {
   duration: number
@@ -62,29 +62,28 @@ export default function WorkoutTimer({ duration, onComplete, autoStart = false }
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-center gap-3">
-        <Timer className="h-6 w-6 text-muted-foreground" />
-        <span className="text-5xl font-bold tabular-nums">{formatTime(timeLeft)}</span>
+      <div className="flex items-center justify-center">
+        <span className="text-6xl font-extrabold tabular-nums tracking-tight">{formatTime(timeLeft)}</span>
       </div>
 
       <Progress value={progress} className="h-3" />
 
-      <div className="flex justify-center gap-3">
+      <div className="flex justify-center gap-4">
         <Button
           variant="outline"
-          size="icon-xl"
+          size="icon"
           onClick={toggleTimer}
           disabled={timeLeft === 0}
-          className="rounded-full"
+          className="h-14 w-14 rounded-2xl border-2 shadow-sm"
         >
           {isActive ? <Pause className="h-6 w-6" /> : <Play className="h-6 w-6" />}
         </Button>
         <Button
           variant="outline"
-          size="icon-xl"
+          size="icon"
           onClick={resetTimer}
           disabled={timeLeft === duration && !isActive}
-          className="rounded-full"
+          className="h-14 w-14 rounded-2xl border-2 shadow-sm"
         >
           <RotateCcw className="h-6 w-6" />
         </Button>
@@ -92,4 +91,3 @@ export default function WorkoutTimer({ duration, onComplete, autoStart = false }
     </div>
   )
 }
-

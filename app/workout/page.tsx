@@ -9,6 +9,8 @@ import { useWorkoutStore } from "@/lib/workout-store"
 import MaxRepsWorkout from "@/components/max-reps-workout"
 import SubMaxWorkout from "@/components/sub-max-workout"
 import VolumeWorkout from "@/components/volume-workout"
+import { Dumbbell, CheckCircle2, ArrowLeft } from "lucide-react"
+import Link from "next/link"
 
 export default function WorkoutPage() {
   const router = useRouter()
@@ -57,30 +59,58 @@ export default function WorkoutPage() {
   }
 
   if (!currentWorkout) {
-    return <div className="container p-4">Cargando...</div>
+    return (
+      <div className="container flex h-[60vh] items-center justify-center p-4">
+        <div className="text-center space-y-3">
+          <div className="mx-auto h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+          <p className="text-muted-foreground">Cargando...</p>
+        </div>
+      </div>
+    )
   }
 
   return (
-    <div className="container px-4 py-6 pb-24">
+    <div className="container px-4 py-6">
       <div className="mb-6 space-y-2">
-        <h1 className="text-2xl font-bold tracking-tight">Entrenamiento</h1>
-        <p className="text-muted-foreground">
-          {currentWorkout.exercise} - {currentWorkout.workoutType}
-        </p>
+        <div className="flex items-center gap-2 mb-1">
+          <Link href="/workout/select" className="text-muted-foreground hover:text-foreground transition-colors">
+            <ArrowLeft className="h-5 w-5" />
+          </Link>
+          <h1 className="text-2xl font-extrabold tracking-tight">Entrenamiento</h1>
+        </div>
+        <div className="flex items-center gap-2 text-muted-foreground">
+          <Dumbbell className="h-4 w-4" />
+          <p className="text-sm font-medium">
+            {currentWorkout.exercise} · {currentWorkout.workoutType}
+          </p>
+        </div>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>{currentWorkout.workoutType}</CardTitle>
-          <CardDescription>
-            {currentWorkout.dayName} - {currentWorkout.exercise}
-          </CardDescription>
+      <Card className="shadow-sm border">
+        <CardHeader className="pb-3">
+          <div className="flex items-center gap-2">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10">
+              <Dumbbell className="h-4 w-4 text-primary" />
+            </div>
+            <div>
+              <CardTitle className="text-lg">{currentWorkout.workoutType}</CardTitle>
+              <CardDescription>
+                {currentWorkout.dayName} · {currentWorkout.exercise}
+              </CardDescription>
+            </div>
+          </div>
         </CardHeader>
         <CardContent>
           {isCompleted ? (
-            <div className="space-y-6 text-center">
-              <h3 className="text-2xl font-bold">¡Completado!</h3>
-              <Button size="xl" onClick={handleFinish} className="w-full">
+            <div className="space-y-6 py-8 text-center">
+              <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-emerald-50 dark:bg-emerald-950">
+                <CheckCircle2 className="h-10 w-10 text-emerald-500" />
+              </div>
+              <div className="space-y-2">
+                <h3 className="text-2xl font-extrabold">¡Completado!</h3>
+                <p className="text-muted-foreground">Gran trabajo. Tu progreso fue guardado.</p>
+              </div>
+              <Button size="lg" onClick={handleFinish} className="w-full h-12 text-base font-semibold shadow-sm">
                 Volver al Inicio
               </Button>
             </div>
@@ -96,4 +126,3 @@ export default function WorkoutPage() {
     </div>
   )
 }
-
