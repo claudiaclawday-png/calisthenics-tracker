@@ -5,29 +5,24 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import WorkoutTimer from "@/components/workout-timer"
-import { useWorkoutStore } from "@/lib/workout-store"
 import { Check, Trophy } from "lucide-react"
-import { cn } from "@/lib/utils"
 
 interface VolumeWorkoutProps {
   onComplete: (data: any) => void
 }
 
 export default function VolumeWorkout({ onComplete }: VolumeWorkoutProps) {
-  const { getLastMaxReps } = useWorkoutStore()
-  const [maxReps, setMaxReps] = useState(10)
   const [currentCycle, setCurrentCycle] = useState(1)
   const [currentRep, setCurrentRep] = useState(1)
   const [showTimer, setShowTimer] = useState(false)
   const [completedReps, setCompletedReps] = useState<number[][]>([])
+  const [cycleCompleted, setCycleCompleted] = useState(false)
   const totalCycles = 5
   const restTime = 30
 
   useEffect(() => {
-    const lastMax = getLastMaxReps()
-    setMaxReps(lastMax > 0 ? lastMax : 10)
     setCompletedReps(Array(totalCycles).fill([]))
-  }, [getLastMaxReps])
+  }, [])
 
   const handleCompleteRep = () => {
     const newCompletedReps = [...completedReps]
@@ -37,22 +32,24 @@ export default function VolumeWorkout({ onComplete }: VolumeWorkoutProps) {
     newCompletedReps[currentCycle - 1] = [...newCompletedReps[currentCycle - 1], currentRep]
     setCompletedReps(newCompletedReps)
 
-    if (currentRep < maxReps) {
-      setCurrentRep(currentRep + 1)
+    setCurrentRep(currentRep + 1)
+    setShowTimer(true)
+  }
+
+  const handleEndCycle = () => {
+    setCycleCompleted(true)
+    if (currentCycle < totalCycles) {
+      setCurrentRep(1)
+      setCurrentCycle(currentCycle + 1)
       setShowTimer(true)
     } else {
-      if (currentCycle < totalCycles) {
-        setCurrentRep(1)
-        setCurrentCycle(currentCycle + 1)
-        setShowTimer(true)
-      } else {
-        handleComplete()
-      }
+      handleComplete()
     }
   }
 
   const handleTimerComplete = () => {
     setShowTimer(false)
+    setCycleCompleted(false)
   }
 
   const handleComplete = () => {
@@ -60,16 +57,14 @@ export default function VolumeWorkout({ onComplete }: VolumeWorkoutProps) {
 
     onComplete({
       cycles: totalCycles,
-      maxReps: maxReps,
       completedReps: completedReps,
       totalReps: totalReps,
     })
   }
 
   const calculateProgress = () => {
-    const totalRepsInWorkout = totalCycles * ((maxReps * (maxReps + 1)) / 2)
-    const completedRepsCount = completedReps.flat().reduce((a, b) => a + b, 0)
-    return (completedRepsCount / totalRepsInWorkout) * 100
+    const completedCycles = completedReps.filter(cycle => cycle.length > 0).length
+    return (completedCycles / totalCycles) * 100
   }
 
   return (
@@ -81,7 +76,12 @@ export default function VolumeWorkout({ onComplete }: VolumeWorkoutProps) {
               <Trophy className="h-6 w-6 text-accent" />
             </div>
             <p className="text-sm font-extrabold uppercase tracking-widest text-muted-foreground">Descanso</p>
-            <p className="text-xs text-muted-foreground">Ciclo {currentCycle} · Rep {currentRep} completada</p>
+            <p className="text-xs text-muted-foreground">
+              {cycleCompleted 
+                ? `Ciclo ${currentCycle - 1} terminado · Iniciando ciclo ${currentCycle}`
+                : `Ciclo ${currentCycle} · Rep ${currentRep - 1} completada`
+              }
+            </p>
           </div>
           <WorkoutTimer duration={restTime} onComplete={handleTimerComplete} autoStart={true} />
         </div>
@@ -93,7 +93,7 @@ export default function VolumeWorkout({ onComplete }: VolumeWorkoutProps) {
                 Ciclo {currentCycle} de {totalCycles}
               </p>
               <p className="text-sm text-muted-foreground">
-                Repetición {currentRep} de {maxReps}
+                Repetición {currentRep}
               </p>
             </div>
             <Progress value={calculateProgress()} className="h-2.5 bg-muted [&>div]:bg-accent" />
@@ -107,14 +107,27 @@ export default function VolumeWorkout({ onComplete }: VolumeWorkoutProps) {
                   <p className="text-sm font-semibold text-muted-foreground">Repeticiones a realizar</p>
                 </div>
 
-                <Button 
-                  size="lg" 
-                  className="w-full h-14 text-base font-extrabold shadow-xl bg-accent text-accent-foreground hover:bg-accent/90 active:scale-95 active:shadow-lg transition-all duration-150"
-                  onClick={handleCompleteRep}
-                >
-                  <Check className="mr-2 h-5 w-5" />
-                  Completar {currentRep} {currentRep === 1 ? "rep" : "reps"}
-                </Button>
+                <div className="space-y-3">
+                  <Button 
+                    size="lg" 
+                    className="w-full h-14 text-base font-extrabold shadow-xl bg-accent text-accent-foreground hover:bg-accent/90 active:scale-95 active:shadow-lg transition-all duration-150"
+                    onClick={handleCompleteRep}
+                  >
+                    <Check className="mr-2 h-5 w-5" />
+                    Completar {currentRep} {currentRep === 1 ? "rep" : "reps"}
+                  </Button>
+
+                  {completedReps[currentCycle - 1]?.length > 0 && (
+                    <Button 
+                      size="lg" 
+                      variant="outline"
+                      className="w-full h-12 text-base font-bold border-2 border-destructive/50 text-destructive hover:bg-destructive/10 active:scale-95 transition-all duration-150"
+                      onClick={handleEndCycle}
+                    >
+                      Terminar ciclo {currentCycle}
+                    </Button>
+                  )}
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -123,26 +136,17 @@ export default function VolumeWorkout({ onComplete }: VolumeWorkoutProps) {
             <CardContent className="pt-5">
               <p className="mb-3 text-xs font-extrabold uppercase tracking-widest text-muted-foreground">Progreso del ciclo</p>
               <div className="flex flex-wrap gap-2">
-                {Array.from({ length: maxReps }, (_, i) => i + 1).map((rep) => {
-                  const isCompleted = completedReps[currentCycle - 1]?.includes(rep)
-                  const isCurrent = rep === currentRep
-
-                  return (
-                    <div
-                      key={rep}
-                      className={cn(
-                        "flex h-11 w-11 items-center justify-center rounded-xl text-sm font-bold transition-all duration-200",
-                        isCompleted
-                          ? "bg-accent text-accent-foreground shadow-md"
-                          : isCurrent
-                            ? "border-2 border-accent bg-background shadow-md ring-2 ring-accent/20"
-                            : "bg-muted text-muted-foreground border border-border"
-                      )}
-                    >
-                      {rep}
-                    </div>
-                  )
-                })}
+                {completedReps[currentCycle - 1]?.map((rep, index) => (
+                  <div
+                    key={index}
+                    className="flex h-11 w-11 items-center justify-center rounded-xl text-sm font-bold bg-accent text-accent-foreground shadow-md"
+                  >
+                    {rep}
+                  </div>
+                ))}
+                <div className="flex h-11 w-11 items-center justify-center rounded-xl text-sm font-bold border-2 border-accent bg-background shadow-md ring-2 ring-accent/20">
+                  {currentRep}
+                </div>
               </div>
             </CardContent>
           </Card>
