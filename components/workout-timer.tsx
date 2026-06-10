@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { Play, Pause, RotateCcw } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { playAlarm, stopAlarmSound } from "@/lib/sounds"
 
 interface WorkoutTimerProps {
   duration: number
@@ -31,6 +32,9 @@ export default function WorkoutTimer({ duration, onComplete, autoStart = false }
         completedRef.current = true
         setIsActive(false)
         sendNotification()
+        try {
+          playAlarm()
+        } catch {}
         onComplete()
       }
     } else {
@@ -77,6 +81,18 @@ export default function WorkoutTimer({ duration, onComplete, autoStart = false }
       Notification.requestPermission().catch(() => {})
     }
   }, [])
+
+  useEffect(() => {
+    if (timeLeft !== 0) return
+    const stopOnInteraction = () => {
+      stopAlarmSound()
+    }
+    const events: (keyof WindowEventMap)[] = ["pointerdown", "keydown", "touchstart"]
+    events.forEach((e) => window.addEventListener(e, stopOnInteraction, { once: true, passive: true }))
+    return () => {
+      events.forEach((e) => window.removeEventListener(e, stopOnInteraction))
+    }
+  }, [timeLeft])
 
   const sendNotification = () => {
     if (typeof window === "undefined" || !("Notification" in window)) return
