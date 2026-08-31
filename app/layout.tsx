@@ -3,6 +3,7 @@ import "@/app/globals.css"
 import { Inter } from "next/font/google"
 import { ThemeProvider } from "@/components/theme-provider"
 import Header from "@/components/header"
+import DailyReminder from "@/components/daily-reminder"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -33,6 +34,7 @@ export default function RootLayout({
             <Header />
             <main className="flex-1 pb-24">{children}</main>
           </div>
+          <DailyReminder />
         </ThemeProvider>
       </body>
     </html>

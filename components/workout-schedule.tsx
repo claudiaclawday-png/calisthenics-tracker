@@ -20,8 +20,6 @@ export default function WorkoutSchedule() {
     setExercise(exercise)
   }, [getCurrentWorkoutDay])
 
-  const isRestDay = exercise === "Descanso"
-
   return (
     <div className="space-y-5">
       <div className="flex items-center justify-between">
@@ -31,31 +29,30 @@ export default function WorkoutSchedule() {
           </div>
           <div>
             <p className="text-xs font-extrabold text-muted-foreground uppercase tracking-widest">Día</p>
-            <p className="text-lg font-extrabold leading-tight">{currentDay}</p>
+            <p className="text-lg font-extrabold leading-tight">
+              {currentDay} <span className="font-bold text-muted-foreground">· {workoutType}</span>
+            </p>
           </div>
         </div>
         <Badge
-          variant={isRestDay ? "secondary" : "default"}
           className="px-3 py-1.5 text-sm font-extrabold bg-accent text-accent-foreground border-0"
         >
           {exercise}
         </Badge>
       </div>
 
-      {!isRestDay && (
-        <div className="space-y-3 rounded-2xl bg-muted/50 p-5 ring-1 ring-border">
-          <div>
-            <p className="text-xs font-extrabold text-muted-foreground uppercase tracking-widest">Tipo</p>
-            <p className="text-base font-extrabold">{workoutType}</p>
-          </div>
-          <p className="text-sm text-muted-foreground leading-relaxed">
-            {workoutType === "Max Reps" && "3 series al máximo con 5 minutos de descanso entre series."}
-            {workoutType === "Sub Max" && "10 series al 50% del máximo con 1 minuto de descanso entre series."}
-            {workoutType === "Volumen Escalera" &&
-              "Escalera de repeticiones 1→Máximo. 5 ciclos con 30 segundos de descanso."}
-          </p>
+      <div className="space-y-3 rounded-2xl bg-muted/50 p-5 ring-1 ring-border">
+        <div>
+          <p className="text-xs font-extrabold text-muted-foreground uppercase tracking-widest">Tipo</p>
+          <p className="text-base font-extrabold">{workoutType}</p>
         </div>
-      )}
+        <p className="text-sm text-muted-foreground leading-relaxed">
+          {workoutType === "Max Reps" && "3 series al máximo con 5 minutos de descanso entre series."}
+          {workoutType === "Sub Max" && "10 series al 50% del máximo con 1 minuto de descanso entre series."}
+          {workoutType === "Volumen Escalera" &&
+            "Escalera de repeticiones 1→Máximo. 5 ciclos con 30 segundos de descanso."}
+        </p>
+      </div>
 
       <Link href="/workout/select">
         <Button variant="outline" size="lg" className="w-full h-11 font-extrabold active:scale-95 transition-all duration-150">

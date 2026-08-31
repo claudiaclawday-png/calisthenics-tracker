@@ -16,29 +16,13 @@ export default function SelectWorkoutPage() {
   const [isTransitioning, setIsTransitioning] = useState(false)
 
   useEffect(() => {
+    // Every schedule entry is an active training day, so use it directly
     const suggested = getCurrentWorkoutDay()
 
-    // Guard: never suggest a rest day; find the next active day if needed
-    let activeSuggested = suggested
-    if (suggested.exercise === "Descanso" || suggested.workoutType === "Descanso") {
-      const schedule = getWorkoutSchedule()
-      const lastDayIndex = schedule.findIndex(
-        (day) => day.workoutType === suggested.workoutType && day.exercise === suggested.exercise,
-      )
-      for (let i = 1; i <= schedule.length; i++) {
-        const idx = (lastDayIndex + i) % schedule.length
-        const day = schedule[idx]
-        if (day.exercise !== "Descanso" && day.workoutType !== "Descanso") {
-          activeSuggested = day
-          break
-        }
-      }
-    }
-
-    setSuggestedWorkout(activeSuggested)
-    setSelectedExercise(activeSuggested.exercise)
-    setSelectedWorkoutType(activeSuggested.workoutType)
-  }, [getCurrentWorkoutDay, getWorkoutSchedule])
+    setSuggestedWorkout(suggested)
+    setSelectedExercise(suggested.exercise)
+    setSelectedWorkoutType(suggested.workoutType)
+  }, [getCurrentWorkoutDay])
 
   const handleStartWorkout = () => {
     setIsTransitioning(true)
@@ -52,12 +36,8 @@ export default function SelectWorkoutPage() {
   }
 
   const workoutSchedule = getWorkoutSchedule()
-  const exercises = Array.from(new Set(workoutSchedule.map((day) => day.exercise))).filter(
-    (exercise) => exercise !== "Descanso",
-  )
-  const workoutTypes = Array.from(new Set(workoutSchedule.map((day) => day.workoutType))).filter(
-    (type) => type !== "Descanso",
-  )
+  const exercises = Array.from(new Set(workoutSchedule.map((day) => day.exercise)))
+  const workoutTypes = Array.from(new Set(workoutSchedule.map((day) => day.workoutType)))
 
   const workoutTypeConfig: Record<string, { icon: typeof Dumbbell; desc: string }> = {
     "Max Reps": { icon: Zap, desc: "3 series al máximo, 5 min descanso" },

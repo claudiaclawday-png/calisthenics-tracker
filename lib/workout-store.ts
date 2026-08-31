@@ -33,18 +33,15 @@ interface WorkoutStore {
   clearWorkouts: () => void
 }
 
-// Define the workout schedule
+// Define the workout schedule: sequential 3-day rotation (Día 1/2/3),
+// each style applied to both exercises. No rest days in the schedule.
 const workoutSchedule: WorkoutDay[] = [
   { dayName: "Día 1", workoutType: "Max Reps", exercise: "Dominadas" },
-  { dayName: "Día 2", workoutType: "Max Reps", exercise: "Fondos" },
-  { dayName: "Día 3", workoutType: "Descanso", exercise: "Descanso" },
-  { dayName: "Día 4", workoutType: "Sub Max", exercise: "Dominadas" },
-  { dayName: "Día 5", workoutType: "Sub Max", exercise: "Fondos" },
-  { dayName: "Día 6", workoutType: "Descanso", exercise: "Descanso" },
-  { dayName: "Día 7", workoutType: "Descanso", exercise: "Descanso" },
-  { dayName: "Día 8", workoutType: "Volumen Escalera", exercise: "Dominadas" },
-  { dayName: "Día 9", workoutType: "Volumen Escalera", exercise: "Fondos" },
-  { dayName: "Día 10", workoutType: "Descanso", exercise: "Descanso" },
+  { dayName: "Día 1", workoutType: "Max Reps", exercise: "Fondos" },
+  { dayName: "Día 2", workoutType: "Sub Max", exercise: "Dominadas" },
+  { dayName: "Día 2", workoutType: "Sub Max", exercise: "Fondos" },
+  { dayName: "Día 3", workoutType: "Volumen Escalera", exercise: "Dominadas" },
+  { dayName: "Día 3", workoutType: "Volumen Escalera", exercise: "Fondos" },
   // The cycle repeats
 ]
 
@@ -58,37 +55,24 @@ export const useWorkoutStore = create<WorkoutStore>()(
       getCurrentWorkoutDay: () => {
         const { lastWorkoutDate, workouts } = get()
 
-        // Helper to find the next active day starting from a given index
-        const findNextActiveDay = (startIndex: number): WorkoutDay => {
-          for (let i = 1; i <= workoutSchedule.length; i++) {
-            const idx = (startIndex + i) % workoutSchedule.length
-            const day = workoutSchedule[idx]
-            if (day.exercise !== "Descanso" && day.workoutType !== "Descanso") {
-              return day
-            }
-          }
-          // Fallback to first active day
-          return workoutSchedule.find((d) => d.exercise !== "Descanso" && d.workoutType !== "Descanso") || workoutSchedule[0]
-        }
-
-        // If no workouts yet, return the first active day
+        // If no workouts yet, return the first day
         if (!lastWorkoutDate || workouts.length === 0) {
-          return findNextActiveDay(-1)
+          return workoutSchedule[0]
         }
 
-        // Find the index of the last workout day
+        // Find the index of the last completed workout in the schedule
         const lastWorkout = workouts[workouts.length - 1]
         const lastDayIndex = workoutSchedule.findIndex(
           (day) => day.workoutType === lastWorkout.workoutType && day.exercise === lastWorkout.exercise,
         )
 
-        // If not found or was the last in the schedule, find next active from beginning
+        // If not found or was the last in the schedule, wrap to the first day
         if (lastDayIndex === -1 || lastDayIndex === workoutSchedule.length - 1) {
-          return findNextActiveDay(-1)
+          return workoutSchedule[0]
         }
 
-        // Return the next active day in the schedule
-        return findNextActiveDay(lastDayIndex)
+        // Return the next day in the sequence (wraps around via modulo)
+        return workoutSchedule[(lastDayIndex + 1) % workoutSchedule.length]
       },
 
       getLastMaxReps: () => {
