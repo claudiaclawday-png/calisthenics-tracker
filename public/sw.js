@@ -37,6 +37,62 @@ function fireNotification() {
   })
 }
 
+// --- Daily reminder (Entrenamiento de hoy) ---
+
+let dailyTimerId = null
+
+function clearDailyTimer() {
+  if (dailyTimerId) {
+    clearTimeout(dailyTimerId)
+    dailyTimerId = null
+  }
+}
+
+function dailyNotificationTitle(data) {
+  return data.workoutDayName
+    ? `Entrenamiento de hoy · ${data.workoutDayName}`
+    : "Entrenamiento de hoy"
+}
+
+function dailyNotificationOptions(data) {
+  return {
+    body: `Hoy: ${data.exercise} — ${data.workoutType}`,
+    vibrate: [200, 100, 200, 100, 200, 100, 400],
+    requireInteraction: true,
+    tag: "daily-reminder",
+    icon: "/icon-192.png",
+    badge: "/icon-192.png",
+  }
+}
+
+function scheduleDailyReminder(data) {
+  clearDailyTimer()
+  const { triggerAt } = data
+  if (typeof triggerAt !== "number") return
+
+  const now = Date.now()
+  const MAX_AHEAD_MS = 8 * 24 * 60 * 60 * 1000
+  // Ignore stale timers and timers too far in the future
+  if (triggerAt <= now || triggerAt - now > MAX_AHEAD_MS) return
+
+  // Progressive enhancement: Notification Triggers API when available
+  try {
+    if (typeof NotificationTrigger !== "undefined" && "showTrigger" in Notification.prototype) {
+      const options = dailyNotificationOptions(data)
+      options.showTrigger = new NotificationTrigger(triggerAt)
+      self.registration.showNotification(dailyNotificationTitle(data), options).catch(() => {})
+    }
+  } catch (error) {}
+
+  // Base path: setTimeout while the service worker stays alive
+  dailyTimerId = setTimeout(() => {
+    dailyTimerId = null
+    self.registration
+      .showNotification(dailyNotificationTitle(data), dailyNotificationOptions(data))
+      .catch(() => {})
+  }, triggerAt - now)
+}
+
 self.addEventListener("message", (event) => {
   if (!event.data || typeof event.data !== "object") return
   const { type } = event.data
@@ -55,6 +111,11 @@ self.addEventListener("message", (event) => {
 
   if (type === "TIMER_STOP") {
     clearTimer()
+    return
+  }
+
+  if (type === "DAILY_REMINDER") {
+    scheduleDailyReminder(event.data)
     return
   }
 })
