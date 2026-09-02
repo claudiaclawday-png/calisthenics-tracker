@@ -43,6 +43,7 @@ export default function RecentWorkouts() {
               {workout.workoutType === "Max Reps" && `Max: ${workout.maxReps}`}
               {workout.workoutType === "Sub Max" && `${workout.sets} series`}
               {workout.workoutType === "Volumen Escalera" && `${workout.cycles} ciclos`}
+              {workout.workoutType === "Complemento" && `${workout.rounds ?? 0} rondas`}
             </p>
           </div>
         </div>
