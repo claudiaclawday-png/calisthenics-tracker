@@ -27,7 +27,6 @@ export default function WorkoutTimer({ duration, onComplete, autoStart = false }
     setTimeLeft(0)
     setIsActive(false)
     onComplete()
-    showLocalNotification("Workout complete", "Time to start your next set!")
   }
 
   const recomputeTimeLeft = () => {
@@ -91,6 +90,13 @@ export default function WorkoutTimer({ duration, onComplete, autoStart = false }
       .catch(() => {})
   }, [])
 
+  // Re-request on a real user gesture (mobile browsers may block non-gesture prompts)
+  const requestNotificationPermission = () => {
+    if (typeof window === "undefined" || !("Notification" in window)) return
+    if (Notification.permission !== "default") return
+    Notification.requestPermission().catch(() => {})
+  }
+
   const sendStartMessage = (duration: number, startTime: number) => {
     if (typeof window === "undefined" || !("serviceWorker" in navigator)) return
     navigator.serviceWorker.ready
@@ -109,14 +115,6 @@ export default function WorkoutTimer({ duration, onComplete, autoStart = false }
       .catch(() => {})
   }
 
-  const showLocalNotification = (title: string, body: string) => {
-    if (typeof window === "undefined" || !("Notification" in window)) return
-    if (Notification.permission !== "granted") return
-    try {
-      new Notification(title, { body, tag: "workout-timer" })
-    } catch {}
-  }
-
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60)
     const secs = seconds % 60
@@ -125,6 +123,9 @@ export default function WorkoutTimer({ duration, onComplete, autoStart = false }
 
   const toggleTimer = () => {
     if (timeLeft === 0) return
+    if (!isActive) {
+      requestNotificationPermission()
+    }
     setIsActive(!isActive)
   }
 

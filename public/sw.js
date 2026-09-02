@@ -27,14 +27,17 @@ function scheduleNotification(duration, startTime) {
 
 function fireNotification() {
   timerId = null
-  self.registration.showNotification("Workout complete", {
-    body: "Time to start your next set!",
-    vibrate: [200, 100, 200, 100, 200, 100, 400],
-    requireInteraction: true,
-    tag: "workout-timer",
-    icon: "/icon-192.png",
-    badge: "/icon-192.png",
-  })
+  if (typeof Notification !== "undefined" && Notification.permission === "denied") return
+  self.registration
+    .showNotification("Descanso terminado", {
+      body: "¡A la próxima serie!",
+      vibrate: [200, 100, 200, 100, 200, 100, 400],
+      requireInteraction: true,
+      tag: "workout-timer",
+      icon: "/icon-192.png",
+      badge: "/icon-192.png",
+    })
+    .catch(() => {})
 }
 
 // --- Daily reminder (Entrenamiento de hoy) ---

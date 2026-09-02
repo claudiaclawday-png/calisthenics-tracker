@@ -12,13 +12,19 @@ export default function Home() {
     <div className="container px-4 py-6 md:py-10">
       <div className="flex flex-col space-y-8">
         {/* Hero */}
-        <div className="flex flex-col items-center space-y-4 text-center">
-          <div className="rounded-2xl bg-accent/10 p-5 shadow-sm ring-1 ring-accent/20">
-            <Logo size={48} showText={false} />
+        <div className="flex flex-col items-center space-y-5 text-center">
+          <div className="relative">
+            <div
+              aria-hidden="true"
+              className="absolute -inset-6 rounded-full bg-accent/20 blur-2xl dark:bg-accent/25"
+            />
+            <div className="relative rounded-2xl bg-gradient-to-b from-accent/15 to-accent/5 p-5 shadow-sm ring-1 ring-accent/25 dark:ring-accent/20">
+              <Logo size={48} showText={false} />
+            </div>
           </div>
           <div>
             <h1 className="text-3xl font-extrabold tracking-tight text-foreground">Calisthenics Tracker</h1>
-            <p className="mt-1 text-muted-foreground text-base">Seguimiento de rutina y progreso</p>
+            <p className="mt-1.5 text-muted-foreground text-base">Seguimiento de rutina y progreso</p>
           </div>
         </div>
 
