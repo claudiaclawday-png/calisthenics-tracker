@@ -36,10 +36,25 @@ export default function HistoryPage() {
     const pullUps = workouts.filter((w) => w.exercise === "Dominadas")
     const dips = workouts.filter((w) => w.exercise === "Fondos")
 
-    return [
+    const groups = [
       { name: "Dominadas", workouts: pullUps },
       { name: "Fondos", workouts: dips },
     ]
+
+    // Keep one group per complement focus (e.g. "Piernas", "Core", "Horizontal")
+    const otherExercises = [
+      ...new Set(
+        workouts
+          .filter((w) => w.exercise !== "Dominadas" && w.exercise !== "Fondos")
+          .map((w) => w.exercise),
+      ),
+    ]
+
+    otherExercises.forEach((name) => {
+      groups.push({ name, workouts: workouts.filter((w) => w.exercise === name) })
+    })
+
+    return groups
   }
 
   const dateGroups = groupByDate(workouts)
@@ -132,6 +147,13 @@ export default function HistoryPage() {
                           <p className="text-3xl font-extrabold tabular-nums text-foreground">{workout.cycles}</p>
                         </div>
                       )}
+
+                      {workout.workoutType === "Complemento" && (
+                        <div className="space-y-1">
+                          <p className="text-xs font-extrabold uppercase tracking-widest text-muted-foreground">Rondas</p>
+                          <p className="text-3xl font-extrabold tabular-nums text-foreground">{workout.rounds}</p>
+                        </div>
+                      )}
                     </div>
                   </CardContent>
                 </Card>
@@ -185,6 +207,13 @@ export default function HistoryPage() {
                           <div className="space-y-1">
                             <p className="text-xs font-extrabold uppercase tracking-widest text-muted-foreground">Ciclos</p>
                             <p className="text-3xl font-extrabold tabular-nums text-foreground">{workout.cycles}</p>
+                          </div>
+                        )}
+
+                        {workout.workoutType === "Complemento" && (
+                          <div className="space-y-1">
+                            <p className="text-xs font-extrabold uppercase tracking-widest text-muted-foreground">Rondas</p>
+                            <p className="text-3xl font-extrabold tabular-nums text-foreground">{workout.rounds}</p>
                           </div>
                         )}
                       </div>

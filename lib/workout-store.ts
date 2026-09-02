@@ -27,6 +27,7 @@ interface WorkoutStore {
   getRecentWorkouts: (count: number) => Workout[]
   getAllWorkouts: () => Workout[]
   getWorkoutSchedule: () => WorkoutDay[]
+  getCurrentComplement: () => { focus: string; tagline: string; exercises: string[] }
   setSelectedWorkout: (workout: { exercise: string; workoutType: string }) => void
   exportWorkouts: () => string
   importWorkouts: (jsonString: string) => { success: boolean; message: string }
@@ -45,6 +46,26 @@ const workoutSchedule: WorkoutDay[] = [
   // The cycle repeats
 ]
 
+// Optional 10-min complement circuit per training day: targets muscle groups
+// the main routine (dominadas/fondos) does NOT cover.
+const complementByDay: Record<number, { focus: string; tagline: string; exercises: string[] }> = {
+  1: {
+    focus: "Piernas",
+    tagline: "Sentadillas, estocadas y glúteos",
+    exercises: ["Sentadillas", "Estocadas", "Puente de glúteo"],
+  },
+  2: {
+    focus: "Core",
+    tagline: "Plancha y abdomen",
+    exercises: ["Plancha", "Elevación de rodillas", "Plancha lateral"],
+  },
+  3: {
+    focus: "Horizontal",
+    tagline: "Push y pull horizontales",
+    exercises: ["Flexiones", "Remo australiano", "Superman"],
+  },
+}
+
 export const useWorkoutStore = create<WorkoutStore>()(
   persist(
     (set, get) => ({
@@ -60,10 +81,28 @@ export const useWorkoutStore = create<WorkoutStore>()(
           return workoutSchedule[0]
         }
 
-        // Find the index of the last completed workout in the schedule
-        const lastWorkout = workouts[workouts.length - 1]
+        // Find the LAST logged workout that actually belongs to the main
+        // rotation (its exercise AND workoutType match a schedule entry).
+        // Complement workouts ("Complemento" / "Piernas", etc.) are skipped so
+        // logging them never resets or derails the main rotation.
+        const lastScheduleWorkout = [...workouts]
+          .reverse()
+          .find((w) =>
+            workoutSchedule.some(
+              (day) => day.workoutType === w.workoutType && day.exercise === w.exercise,
+            ),
+          )
+
+        // If no matching workout exists, start from the first day
+        if (!lastScheduleWorkout) {
+          return workoutSchedule[0]
+        }
+
+        // Find the index of that workout in the schedule
         const lastDayIndex = workoutSchedule.findIndex(
-          (day) => day.workoutType === lastWorkout.workoutType && day.exercise === lastWorkout.exercise,
+          (day) =>
+            day.workoutType === lastScheduleWorkout.workoutType &&
+            day.exercise === lastScheduleWorkout.exercise,
         )
 
         // If not found or was the last in the schedule, wrap to the first day
@@ -111,6 +150,12 @@ export const useWorkoutStore = create<WorkoutStore>()(
 
       getWorkoutSchedule: () => {
         return workoutSchedule
+      },
+
+      getCurrentComplement: () => {
+        const currentDay = get().getCurrentWorkoutDay()
+        const dayNumber = Number(currentDay.dayName.replace("Día ", ""))
+        return complementByDay[dayNumber] || complementByDay[1]
       },
 
       setSelectedWorkout: (workout) => {

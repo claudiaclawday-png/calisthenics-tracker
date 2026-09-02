@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import WorkoutSchedule from "@/components/workout-schedule"
 import RecentWorkouts from "@/components/recent-workouts"
+import ComplementCard from "@/components/complement-card"
 import Logo from "@/components/logo"
 import { History, Flame } from "lucide-react"
 
@@ -68,6 +69,9 @@ export default function Home() {
             </CardContent>
           </Card>
         </div>
+
+        {/* Complement Card */}
+        <ComplementCard />
       </div>
     </div>
   )
