@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation"
 import { Home, Calendar, BarChart3 } from "lucide-react"
 import { cn } from "@/lib/utils"
 import Logo from "./logo"
+import ThemeToggle from "./theme-toggle"
 
 export default function Header() {
   const pathname = usePathname()
@@ -19,12 +20,13 @@ export default function Header() {
     <>
       {/* Top Header */}
       <header className="sticky top-0 z-50 border-b border-border/80 bg-background/90 backdrop-blur-xl shadow-[0_1px_3px_-1px_rgba(0,0,0,0.08)]">
-        <div className="container flex h-14 items-center px-4 pt-safe">
+        <div className="container flex h-14 items-center justify-between px-4 pt-safe">
           <div className="flex items-center">
             <Link href="/" className="flex items-center space-x-2 active:opacity-70 transition-opacity">
               <Logo />
             </Link>
           </div>
+          <ThemeToggle />
         </div>
       </header>
 
