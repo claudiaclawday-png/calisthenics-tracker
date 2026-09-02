@@ -3,18 +3,33 @@
 import { useState, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Button } from "@/components/ui/button"
 import { useWorkoutStore } from "@/lib/workout-store"
 import { formatDate } from "@/lib/utils"
-import { Calendar, Trophy, Dumbbell, TrendingUp } from "lucide-react"
+import { Calendar, Trophy, Dumbbell, TrendingUp, Trash2 } from "lucide-react"
 import HistoryActions from "@/components/history-actions"
+import { useToast } from "@/hooks/use-toast"
 
 export default function HistoryPage() {
   const [workouts, setWorkouts] = useState<any[]>([])
   const { getAllWorkouts } = useWorkoutStore()
+  const { toast } = useToast()
 
   useEffect(() => {
     setWorkouts(getAllWorkouts())
   }, [getAllWorkouts])
+
+  const handleDeleteWorkout = async (workout: any) => {
+    const ok = window.confirm("¿Eliminar este entrenamiento del historial?")
+    if (!ok) return
+
+    useWorkoutStore.getState().removeWorkout(workout.id || workout.date)
+    setWorkouts(useWorkoutStore.getState().getAllWorkouts())
+    toast({
+      title: "Entrenamiento eliminado",
+      description: "Se quitó del historial",
+    })
+  }
 
   const groupByDate = (workouts: any[]) => {
     const grouped: Record<string, any[]> = {}
@@ -110,14 +125,25 @@ export default function HistoryPage() {
               {group.workouts.map((workout, wIndex) => (
                 <Card key={wIndex} className="shadow-md border-2 border-border transition-shadow hover:shadow-lg">
                   <CardHeader className="pb-2">
-                    <div className="flex items-center gap-2">
-                      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent/10 ring-1 ring-accent/20">
-                        <Dumbbell className="h-4 w-4 text-accent" />
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex items-center gap-2">
+                        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent/10 ring-1 ring-accent/20">
+                          <Dumbbell className="h-4 w-4 text-accent" />
+                        </div>
+                        <div>
+                          <CardTitle className="text-base font-bold">{workout.exercise}</CardTitle>
+                          <CardDescription>{workout.workoutType}</CardDescription>
+                        </div>
                       </div>
-                      <div>
-                        <CardTitle className="text-base font-bold">{workout.exercise}</CardTitle>
-                        <CardDescription>{workout.workoutType}</CardDescription>
-                      </div>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-11 w-11 shrink-0 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
+                        aria-label="Eliminar entrenamiento"
+                        onClick={() => handleDeleteWorkout(workout)}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
                     </div>
                   </CardHeader>
                   <CardContent>
@@ -172,14 +198,25 @@ export default function HistoryPage() {
                 group.workouts.map((workout, wIndex) => (
                   <Card key={wIndex} className="shadow-md border-2 border-border transition-shadow hover:shadow-lg">
                     <CardHeader className="pb-2">
-                      <div className="flex items-center gap-2">
-                        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent/10 ring-1 ring-accent/20">
-                          <Dumbbell className="h-4 w-4 text-accent" />
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="flex items-center gap-2">
+                          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent/10 ring-1 ring-accent/20">
+                            <Dumbbell className="h-4 w-4 text-accent" />
+                          </div>
+                          <div>
+                            <CardTitle className="text-base font-bold">{workout.workoutType}</CardTitle>
+                            <CardDescription>{formatDate(workout.date)}</CardDescription>
+                          </div>
                         </div>
-                        <div>
-                          <CardTitle className="text-base font-bold">{workout.workoutType}</CardTitle>
-                          <CardDescription>{formatDate(workout.date)}</CardDescription>
-                        </div>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="h-11 w-11 shrink-0 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
+                          aria-label="Eliminar entrenamiento"
+                          onClick={() => handleDeleteWorkout(workout)}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
                       </div>
                     </CardHeader>
                     <CardContent>
