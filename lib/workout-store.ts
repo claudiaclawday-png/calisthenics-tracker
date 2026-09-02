@@ -10,11 +10,20 @@ interface WorkoutDay {
 }
 
 interface Workout {
+  id?: string
   date: string
   exercise: string
   workoutType: string
   totalReps: number
   [key: string]: any
+}
+
+// Unique id for persisted workouts; falls back when crypto.randomUUID is unavailable
+function makeId(): string {
+  if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+    return crypto.randomUUID()
+  }
+  return Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 10)
 }
 
 interface WorkoutStore {
@@ -24,6 +33,7 @@ interface WorkoutStore {
   getCurrentWorkoutDay: () => WorkoutDay
   getLastMaxReps: () => number
   completeWorkout: (workout: Workout) => void
+  removeWorkout: (idOrDate: string) => void
   getRecentWorkouts: (count: number) => Workout[]
   getAllWorkouts: () => Workout[]
   getWorkoutSchedule: () => WorkoutDay[]
@@ -138,8 +148,15 @@ export const useWorkoutStore = create<WorkoutStore>()(
 
       completeWorkout: (workout) => {
         set((state) => ({
-          workouts: [...state.workouts, workout],
+          workouts: [...state.workouts, { ...workout, id: workout.id || makeId() }],
           lastWorkoutDate: workout.date,
+        }))
+      },
+
+      // Hard delete by id (preferred) or date (legacy entries predating the id field)
+      removeWorkout: (idOrDate) => {
+        set((state) => ({
+          workouts: state.workouts.filter((w) => w.id !== idOrDate && w.date !== idOrDate),
         }))
       },
 
