@@ -7,19 +7,28 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { useToast } from "@/hooks/use-toast"
 import { useWorkoutStore } from "@/lib/workout-store"
 import ComplementWorkout from "@/components/complement-workout"
-import { Timer, CheckCircle2, ArrowLeft } from "lucide-react"
+import { Timer, CheckCircle2, ArrowLeft, Sparkles, Check } from "lucide-react"
+import { cn } from "@/lib/utils"
+
+interface Complement {
+  focus: string
+  tagline: string
+  exercises: string[]
+}
 
 export default function ComplementPage() {
   const { toast } = useToast()
-  const [complement, setComplement] = useState<{
-    focus: string
-    tagline: string
-    exercises: string[]
-  } | null>(null)
+  const [suggested, setSuggested] = useState<Complement | null>(null)
+  const [allComplements, setAllComplements] = useState<Complement[]>([])
+  const [selectedComplement, setSelectedComplement] = useState<Complement | null>(null)
   const [isCompleted, setIsCompleted] = useState(false)
 
   useEffect(() => {
-    setComplement(useWorkoutStore.getState().getCurrentComplement())
+    const suggestedComplement = useWorkoutStore.getState().getCurrentComplement()
+    const complements = useWorkoutStore.getState().getAllComplements()
+    setSuggested(suggestedComplement)
+    setAllComplements(complements)
+    setSelectedComplement(suggestedComplement)
   }, [])
 
   const handleComplete = (data: any) => {
@@ -35,7 +44,7 @@ export default function ComplementPage() {
     })
   }
 
-  if (!complement) {
+  if (!suggested || !selectedComplement) {
     return (
       <div className="container flex h-[60vh] items-center justify-center p-4">
         <div className="text-center space-y-3">
@@ -58,8 +67,63 @@ export default function ComplementPage() {
         <div className="flex items-center gap-2 text-muted-foreground">
           <Timer className="h-4 w-4" />
           <p className="text-sm font-semibold">
-            Hoy: {complement.focus} · {complement.tagline}
+            Enfocando: {selectedComplement.focus} · {selectedComplement.tagline}
           </p>
+        </div>
+      </div>
+
+      {/* Focus Selector */}
+      <div className="mb-6 space-y-3">
+        <h2 className="text-xs font-extrabold text-muted-foreground uppercase tracking-widest">Enfoque</h2>
+        <div className="space-y-3">
+          {allComplements.map((comp) => {
+            const isSelected = selectedComplement.focus === comp.focus
+            const isSuggested = suggested.focus === comp.focus
+            return (
+              <button
+                key={comp.focus}
+                onClick={() => {
+                  setSelectedComplement(comp)
+                  setIsCompleted(false)
+                }}
+                className={cn(
+                  "relative flex w-full items-center gap-4 rounded-2xl border-2 p-4 text-left transition-all duration-200",
+                  "min-h-11 active:scale-[0.98] active:shadow-inner",
+                  isSelected
+                    ? "border-accent bg-accent text-accent-foreground shadow-lg"
+                    : "border-border bg-card text-foreground hover:border-accent/50 hover:shadow-md hover:bg-muted/50",
+                )}
+              >
+                {isSuggested && (
+                  <span
+                    className={cn(
+                      "absolute top-3 right-3 inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[10px] font-extrabold uppercase tracking-widest",
+                      isSelected
+                        ? "bg-accent-foreground/20 text-accent-foreground"
+                        : "bg-accent/10 text-accent ring-1 ring-accent/20",
+                    )}
+                  >
+                    <Sparkles className="h-3 w-3" />
+                    Hoy
+                  </span>
+                )}
+                <div className="flex-1 min-w-0 pr-12">
+                  <p className="font-extrabold text-base">{comp.focus}</p>
+                  <p className={cn("text-sm", isSelected ? "text-accent-foreground/80" : "text-muted-foreground")}>
+                    {comp.tagline}
+                  </p>
+                  <p className={cn("mt-1 text-xs", isSelected ? "text-accent-foreground/70" : "text-muted-foreground/80")}>
+                    {comp.exercises.join(" · ")}
+                  </p>
+                </div>
+                {isSelected && (
+                  <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-accent-foreground shadow-sm">
+                    <Check className="h-4 w-4 text-accent" strokeWidth={3} />
+                  </div>
+                )}
+              </button>
+            )
+          })}
         </div>
       </div>
 
@@ -70,8 +134,8 @@ export default function ComplementPage() {
               <Timer className="h-4 w-4 text-accent" />
             </div>
             <div>
-              <CardTitle className="text-lg font-bold">{complement.focus}</CardTitle>
-              <CardDescription>{complement.tagline}</CardDescription>
+              <CardTitle className="text-lg font-bold">{selectedComplement.focus}</CardTitle>
+              <CardDescription>{selectedComplement.tagline}</CardDescription>
             </div>
           </div>
         </CardHeader>
@@ -96,9 +160,10 @@ export default function ComplementPage() {
             </div>
           ) : (
             <ComplementWorkout
-              focus={complement.focus}
-              tagline={complement.tagline}
-              exercises={complement.exercises}
+              key={selectedComplement.focus}
+              focus={selectedComplement.focus}
+              tagline={selectedComplement.tagline}
+              exercises={selectedComplement.exercises}
               onComplete={handleComplete}
             />
           )}

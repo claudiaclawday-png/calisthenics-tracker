@@ -28,6 +28,16 @@ interface WorkoutStore {
   getAllWorkouts: () => Workout[]
   getWorkoutSchedule: () => WorkoutDay[]
   getCurrentComplement: () => { focus: string; tagline: string; exercises: string[] }
+  getAllComplements: () => { focus: string; tagline: string; exercises: string[] }[]
+  getUpcomingPlan: (
+    count: number,
+  ) => Array<{
+    index: number
+    dayName: string
+    workoutType: string
+    exercise: string
+    complement: { focus: string; tagline: string; exercises: string[] }
+  }>
   setSelectedWorkout: (workout: { exercise: string; workoutType: string }) => void
   exportWorkouts: () => string
   importWorkouts: (jsonString: string) => { success: boolean; message: string }
@@ -156,6 +166,45 @@ export const useWorkoutStore = create<WorkoutStore>()(
         const currentDay = get().getCurrentWorkoutDay()
         const dayNumber = Number(currentDay.dayName.replace("Día ", ""))
         return complementByDay[dayNumber] || complementByDay[1]
+      },
+
+      getAllComplements: () => {
+        // Stable order: Piernas, Core, Horizontal (derived from the day map)
+        return [complementByDay[1], complementByDay[2], complementByDay[3]]
+      },
+
+      getUpcomingPlan: (count) => {
+        // Pure read: never advances or mutates the rotation
+        const currentDay = get().getCurrentWorkoutDay()
+        const startIdx = workoutSchedule.findIndex(
+          (day) =>
+            day.dayName === currentDay.dayName &&
+            day.workoutType === currentDay.workoutType &&
+            day.exercise === currentDay.exercise,
+        )
+
+        const plan: Array<{
+          index: number
+          dayName: string
+          workoutType: string
+          exercise: string
+          complement: { focus: string; tagline: string; exercises: string[] }
+        }> = []
+
+        for (let i = 0; i < count; i++) {
+          const idx = ((startIdx === -1 ? 0 : startIdx) + i) % workoutSchedule.length
+          const entry = workoutSchedule[idx]
+          const dayNumber = Number(entry.dayName.replace("Día ", ""))
+          plan.push({
+            index: i + 1,
+            dayName: entry.dayName,
+            workoutType: entry.workoutType,
+            exercise: entry.exercise,
+            complement: complementByDay[dayNumber] || complementByDay[1],
+          })
+        }
+
+        return plan
       },
 
       setSelectedWorkout: (workout) => {

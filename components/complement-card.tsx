@@ -27,7 +27,7 @@ export default function ComplementCard() {
           </div>
           <CardTitle className="text-lg">Complemento de 10 min</CardTitle>
         </div>
-        <CardDescription>Bloque opcional para piernas, core y plano horizontal</CardDescription>
+        <CardDescription>Elegí el enfoque: piernas, core o plano horizontal</CardDescription>
       </CardHeader>
       <CardContent className="space-y-5">
         <div className="space-y-3 rounded-2xl bg-muted/50 p-5 ring-1 ring-border">
@@ -37,13 +37,22 @@ export default function ComplementCard() {
           </div>
           <p className="text-sm text-muted-foreground leading-relaxed">{tagline}</p>
         </div>
-        <div>
+        <div className="space-y-3">
           <Link href="/workout/complement">
             <Button
               size="lg"
               className="w-full h-12 text-base font-extrabold shadow-lg bg-accent text-accent-foreground hover:bg-accent/90 active:scale-95 transition-all duration-150"
             >
               Comenzar Complemento
+            </Button>
+          </Link>
+          <Link href="/plan">
+            <Button
+              variant="outline"
+              size="lg"
+              className="w-full h-11 font-extrabold active:scale-95 transition-all duration-150"
+            >
+              Ver Plan de la semana
             </Button>
           </Link>
         </div>
