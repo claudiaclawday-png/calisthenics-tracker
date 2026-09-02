@@ -157,7 +157,10 @@ export default function ComplementWorkout({ focus, exercises, onComplete }: Comp
           <p className="text-xs font-extrabold uppercase tracking-widest text-accent">Ronda {session.round}</p>
         </div>
         <div className="text-center">
-          <p className="text-5xl font-extrabold tabular-nums tracking-tight text-foreground">
+          <p
+            key={session.sessionRemaining}
+            className="inline-block text-5xl font-extrabold tabular-nums tracking-tight text-foreground animate-in zoom-in-95 fade-in speed-300"
+          >
             {formatTime(session.sessionRemaining)}
           </p>
           <p className="mt-1 text-xs text-muted-foreground">
@@ -181,7 +184,12 @@ export default function ComplementWorkout({ focus, exercises, onComplete }: Comp
                 </div>
                 <p className="text-xs font-extrabold uppercase tracking-widest text-accent">Trabajo</p>
                 <p className="text-2xl font-extrabold leading-tight text-foreground">{exercises[session.exerciseIndex]}</p>
-                <p className="text-4xl font-extrabold tabular-nums tracking-tight text-accent">{session.intervalRemaining}s</p>
+                <p
+                  key={`${session.isWork}-${session.intervalRemaining}`}
+                  className="inline-block text-4xl font-extrabold tabular-nums tracking-tight text-accent animate-in zoom-in-95 fade-in speed-300"
+                >
+                  {session.intervalRemaining}s
+                </p>
               </div>
 
               {/* Reps stepper */}
@@ -216,7 +224,12 @@ export default function ComplementWorkout({ focus, exercises, onComplete }: Comp
                 <Trophy className="h-6 w-6 text-accent" />
               </div>
               <p className="text-xs font-extrabold uppercase tracking-widest text-muted-foreground">Descanso</p>
-              <p className="text-5xl font-extrabold tabular-nums tracking-tight text-accent">{session.intervalRemaining}s</p>
+              <p
+                key={`${session.isWork}-${session.intervalRemaining}`}
+                className="inline-block text-5xl font-extrabold tabular-nums tracking-tight text-accent animate-in zoom-in-95 fade-in speed-300"
+              >
+                {session.intervalRemaining}s
+              </p>
               <p className="text-sm text-muted-foreground">
                 Siguiente: <span className="font-bold text-foreground">{exercises[nextExerciseIndex]}</span>
               </p>

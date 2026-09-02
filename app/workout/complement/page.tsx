@@ -142,7 +142,11 @@ export default function ComplementPage() {
         <CardContent>
           {isCompleted ? (
             <div className="space-y-6 py-8 text-center">
-              <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-accent/10 ring-2 ring-accent/20">
+              <div className="relative mx-auto flex h-20 w-20 animate-in items-center justify-center rounded-full bg-accent/10 ring-2 ring-accent/20 zoom-in-50 speed-500">
+                <span
+                  aria-hidden="true"
+                  className="absolute inset-0 rounded-full ring-2 ring-accent/40 animate-pulse"
+                />
                 <CheckCircle2 className="h-10 w-10 text-accent" />
               </div>
               <div className="space-y-2">

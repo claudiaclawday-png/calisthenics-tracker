@@ -146,7 +146,13 @@ export default function WorkoutTimer({ duration, onComplete, autoStart = false }
   return (
     <div className="space-y-8">
       <div className="flex items-center justify-center">
-        <span className={cn("text-7xl font-extrabold tabular-nums tracking-tight transition-colors duration-300", getTimerColor())}>
+        <span
+          key={timeLeft}
+          className={cn(
+            "inline-block text-7xl font-extrabold tabular-nums tracking-tight transition-colors duration-300 animate-in zoom-in-95 fade-in speed-300",
+            getTimerColor(),
+          )}
+        >
           {formatTime(timeLeft)}
         </span>
       </div>

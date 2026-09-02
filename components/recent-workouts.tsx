@@ -15,10 +15,13 @@ export default function RecentWorkouts() {
 
   if (recentWorkouts.length === 0) {
     return (
-      <div className="flex h-32 items-center justify-center text-center rounded-2xl bg-muted/30 ring-1 ring-border">
-        <div className="space-y-2">
+      <div className="flex h-32 animate-in items-center justify-center rounded-2xl bg-muted/30 text-center ring-1 ring-border fade-in speed-500">
+        <div className="space-y-2 px-4">
           <Trophy className="mx-auto h-6 w-6 text-muted-foreground/60" />
-          <p className="text-sm text-muted-foreground">Sin entrenamientos registrados</p>
+          <p className="text-sm font-semibold text-muted-foreground">Todavía no hay entrenamientos</p>
+          <p className="text-xs text-muted-foreground/80">
+            Completá tu primera sesión y va a aparecer acá.
+          </p>
         </div>
       </div>
     )

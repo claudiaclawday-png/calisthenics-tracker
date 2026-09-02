@@ -77,14 +77,16 @@ export default function HistoryPage() {
 
   if (workouts.length === 0) {
     return (
-      <div className="container flex h-[60vh] items-center justify-center px-4 py-6">
+      <div className="container flex h-[60vh] animate-in items-center justify-center px-4 py-6 fade-in slide-in-from-bottom-2 speed-500">
         <div className="text-center space-y-4">
           <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-accent/10 ring-1 ring-accent/20">
             <Trophy className="h-8 w-8 text-accent" />
           </div>
           <div className="space-y-1">
-            <h2 className="text-xl font-bold">Sin entrenamientos</h2>
-            <p className="text-muted-foreground text-sm">Completa tu primer entrenamiento para ver tu historial</p>
+            <h2 className="text-xl font-bold">Todavía no hay entrenamientos</h2>
+            <p className="text-muted-foreground text-sm">
+              Completá tu primera sesión y empezá a construir tu historial.
+            </p>
           </div>
         </div>
       </div>

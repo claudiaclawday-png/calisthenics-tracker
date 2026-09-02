@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider"
 import ThemeColor from "@/components/theme-color"
 import Header from "@/components/header"
 import DailyReminder from "@/components/daily-reminder"
+import PageTransition from "@/components/page-transition"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -33,7 +34,9 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <div className="flex min-h-screen flex-col">
             <Header />
-            <main className="flex-1 pb-24">{children}</main>
+            <main className="flex-1 pb-24">
+              <PageTransition>{children}</PageTransition>
+            </main>
           </div>
           <DailyReminder />
           <ThemeColor />

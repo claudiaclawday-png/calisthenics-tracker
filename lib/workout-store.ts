@@ -39,6 +39,8 @@ interface WorkoutStore {
   getWorkoutSchedule: () => WorkoutDay[]
   getCurrentComplement: () => { focus: string; tagline: string; exercises: string[] }
   getAllComplements: () => { focus: string; tagline: string; exercises: string[] }[]
+  getWorkoutTypeDetails: (type: string) => { label: string; prescription: string }
+  getWeekStats: () => { thisWeek: number; streak: number }
   getUpcomingPlan: (
     count: number,
   ) => Array<{
@@ -188,6 +190,55 @@ export const useWorkoutStore = create<WorkoutStore>()(
       getAllComplements: () => {
         // Stable order: Piernas, Core, Horizontal (derived from the day map)
         return [complementByDay[1], complementByDay[2], complementByDay[3]]
+      },
+
+      getWorkoutTypeDetails: (type) => {
+        const details: Record<string, { label: string; prescription: string }> = {
+          "Max Reps": {
+            label: "Max Reps",
+            prescription: "3 series al máximo · 5 min descanso",
+          },
+          "Sub Max": {
+            label: "Sub Max",
+            prescription: "10 series al 50% del máximo · 1 min descanso",
+          },
+          "Volumen Escalera": {
+            label: "Volumen Escalera",
+            prescription: "Escalera 1→máximo · 5 ciclos · 30 s descanso",
+          },
+        }
+        return details[type] || { label: type, prescription: "" }
+      },
+
+      getWeekStats: () => {
+        const { workouts } = get()
+        const active = workouts.filter((w) => w.workoutType !== "Descanso")
+
+        // Local YYYY-MM-DD key (no timezone drift)
+        const toKey = (d: Date) =>
+          `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`
+        const activeDays = new Set(active.map((w) => toKey(new Date(w.date))))
+
+        // Sessions logged since local Monday 00:00
+        const now = new Date()
+        const monday = new Date(now)
+        monday.setHours(0, 0, 0, 0)
+        monday.setDate(monday.getDate() - ((monday.getDay() + 6) % 7))
+        const thisWeek = active.filter((w) => new Date(w.date) >= monday).length
+
+        // Streak: consecutive active days ending today (today may still be pending)
+        let streak = 0
+        const cursor = new Date(now)
+        cursor.setHours(0, 0, 0, 0)
+        if (!activeDays.has(toKey(cursor))) {
+          cursor.setDate(cursor.getDate() - 1)
+        }
+        while (activeDays.has(toKey(cursor))) {
+          streak += 1
+          cursor.setDate(cursor.getDate() - 1)
+        }
+
+        return { thisWeek, streak }
       },
 
       getUpcomingPlan: (count) => {

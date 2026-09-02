@@ -1,4 +1,18 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@config "../tailwind.config.ts";
+
+/* Tailwind v4 does not auto-load the JS config; @config restores the color
+   theme (accent/card/border/muted/primary…), darkMode: class, and container
+   settings so all the *-accent/*-card utility classes actually generate.
+   The tailwindcss-animate JS plugin can't run under v4, so tw-animate-css
+   (above) covers the animation utilities. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Animation speed helper for tw-animate-css (e.g. animate-in fade-in speed-500) */
+@utility speed-* {
+  animation-duration: calc(--value(integer) * 1ms);
+}
 
 @layer base {
   :root {
@@ -102,5 +116,16 @@
   .px-safe {
     padding-left: env(safe-area-inset-left);
     padding-right: env(safe-area-inset-right);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
