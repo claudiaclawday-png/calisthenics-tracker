@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import WorkoutSchedule from "@/components/workout-schedule"
 import RecentWorkouts from "@/components/recent-workouts"
 import ComplementCard from "@/components/complement-card"
+import WeeklyStats from "@/components/weekly-stats"
 import Logo from "@/components/logo"
 import { History, Flame } from "lucide-react"
 
@@ -78,6 +79,9 @@ export default function Home() {
 
         {/* Complement Card */}
         <ComplementCard />
+
+        {/* Weekly stats: sessions this week + streak */}
+        <WeeklyStats />
       </div>
     </div>
   )
